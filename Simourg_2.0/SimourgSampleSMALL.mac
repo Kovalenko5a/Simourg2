@@ -1,0 +1,67 @@
+# mac file for Simourg_1.3
+
+/user/init
+/user/showAll
+# Parameters of the passive shield
+
+/user/D_SHLD 150.00 mm
+/user/ZL_SHLD 150.00 mm  
+#/user/MaterialSHLDDensity 8.96 g/cm3
+#/user/MaterialSHLDElementName Cu
+#/user/MaterialSHLDFormulaNum 1
+# Parameters of the Detector volume
+
+/user/XL_Det 50.00 mm
+/user/YL_Det 50.00 mm
+/user/ZL_Det 50.00 mm
+/user/Z_Det -50.00 mm
+/user/MaterialDetDensity 3.07 g/cm3
+/user/MaterialDetElementName Li
+/user/MaterialDetFormulaNum 2
+/user/MaterialDetElementName Mo
+/user/MaterialDetFormulaNum 1
+/user/MaterialDetElementName O
+/user/MaterialDetFormulaNum 4
+
+# Parameters of the additional volumes (Top1-Top3, Bot1-Bot3)
+
+/user/D_Bot1 100.00 mm
+/user/ZL_Bot1 10.00 mm
+
+/user/Z_Bot1 5.00 mm
+/user/MaterialBot1Density 8.96 g/cm3
+/user/MaterialBot1ElementName Cu
+/user/MaterialBot1FormulaNum 1
+
+# Parameters of the Source quasivolume
+
+#/user/VolumeSrc Src
+#/user/D_Src 1.00 mm
+/user/XL_Src 1.00 mm
+/user/YL_Src 1.00 mm
+/user/ZL_Src 1.00 mm
+/user/Z_Src 16.00 mm
+
+/user/Decay0File C:/Users/111/Documents/Simourg/Simourg_1.4/Tl208.dat
+
+
+
+/user/Threshold 1.0 keV
+/user/ELowLimit 1.0 keV 
+/user/DELowLimit 1000.0 nm
+/user/DGLowLimit 1000.0 nm
+/user/ChannelWidth 1.0 keV
+/user/numberOfRuns 10
+/user/Step 100
+/user/RandomSeed 90115037
+/user/WaitCommand 0
+/user/VerboseVis 1
+/user/VerboseAll 1
+/user/DoPicture 0
+/user/tMin 0.0 s
+/user/tMax 0.1 s
+/user/AllowIsotropicRotation 1
+
+/user/PhysicsList Shielding_LIV
+
+/user/showAll
