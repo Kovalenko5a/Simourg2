@@ -29,6 +29,7 @@ public:
   G4int MaterialSHLDFormulaN[20]; // Numbers of atoms (by element) in chemical formula of MaterialSHLD
   G4int MaterialSHLDFormulaNum; // Number of atoms of given element in chemical formula of MaterialSHLD
   G4int MaterialSHLDNComponents; // Number of components in chemical formula of MaterialSHLD
+  std::map<G4String, G4double> SHLDNElementSolution;
 
   G4int isCover2Box; // if 0, the Cover2 is cylindric (in this case, there should be XL_Cover2==YL_Cover2)
   G4double D_Cover2; // diameter of the Cover2, mm
@@ -45,6 +46,7 @@ public:
   G4int MaterialCover2FormulaN[20]; // Numbers of atoms (by element) in chemical formula of MaterialCover2
   G4int MaterialCover2FormulaNum; // Number of atoms of given element in chemical formula of MaterialCover2
   G4int MaterialCover2NComponents; // Number of components in chemical formula of MaterialCover2
+  std::map<G4String, G4double> Cover2ElementSolution;
 
 
   G4int isCover1Box; // if 0, the core is cylindric (in this case, there should be XL_Cover1==YL_Cover1)
@@ -62,6 +64,7 @@ public:
   G4int MaterialCover1FormulaN[20]; // Numbers of atoms (by element) in chemical formula of MaterialCover1
   G4int MaterialCover1FormulaNum; // Number of atoms of given element in chemical formula of MaterialCover1
   G4int MaterialCover1NComponents; // Number of components in chemical formula of MaterialCover1
+  std::map<G4String, G4double> Cover1ElementSolution;
 
   G4int isDetBox; // if 0, the detector is cylindric (in this case, there should be XL_Det==YL_Det)
   G4double D_Det; // diameter of the detector, mm
@@ -78,6 +81,7 @@ public:
   G4int MaterialDetFormulaN[20]; // Numbers of atoms (by element) in chemical formula of MaterialDet
   G4int MaterialDetFormulaNum; // Number of atoms of given element in chemical formula of MaterialDet
   G4int MaterialDetNComponents; // Number of components in chemical formula of MaterialDet
+  std::map<G4String, G4double> DetElementSolution;
 
   G4int isCavityBox; // if 0, the detector is cylindric (in this case, there should be XL_Det==YL_Det)  
 	G4double D_Cavity; // diameter of the cavity, mm
@@ -94,6 +98,7 @@ public:
   G4int MaterialCavityFormulaN[20]; // Numbers of atoms (by element) in chemical formula of MaterialCavity
   G4int MaterialCavityFormulaNum; // Number of atoms of given element in chemical formula of MaterialCavity
   G4int MaterialCavityNComponents; // Number of components in chemical formula of MaterialCavity
+  std::map<G4String, G4double> CavityElementSolution;
 
   G4double D_Top1; // length of the Top1 volume along x axis, mm
   G4double d_Top1; // inner diameter of the Top1 volume, mm
@@ -112,6 +117,7 @@ public:
   G4int MaterialTop1FormulaN[20]; // Numbers of atoms (by element) in chemical formula of MaterialTop1
   G4int MaterialTop1FormulaNum; // Number of atoms of given element in chemical formula of MaterialTop1
   G4int MaterialTop1NComponents; // Number of components in chemical formula of MaterialTop1
+  std::map<G4String, G4double> Top1ElementSolution;
 
   G4double D_Top2; // length of the Top2 volume along x axis, mm
   G4double d_Top2; // inner diameter of the Top2 volume, mm
@@ -126,6 +132,7 @@ public:
   G4int MaterialTop2FormulaN[20]; // Numbers of atoms (by element) in chemical formula of MaterialTop2
   G4int MaterialTop2FormulaNum; // Number of atoms of given element in chemical formula of MaterialTop2
   G4int MaterialTop2NComponents; // Number of components in chemical formula of MaterialTop2
+  std::map<G4String, G4double> Top2ElementSolution;
   // G4int isTop2aDetector;
 
   G4double D_Top3; // length of the Top3 volume along x axis, mm
@@ -141,6 +148,7 @@ public:
   G4int MaterialTop3FormulaN[20]; // Numbers of atoms (by element) in chemical formula of MaterialTop3
   G4int MaterialTop3FormulaNum; // Number of atoms of given element in chemical formula of MaterialTop3
   G4int MaterialTop3NComponents; // Number of components in chemical formula of MaterialTop3
+  std::map<G4String, G4double> Top3ElementSolution;
 
   G4double D_Bot1; // length of the Bot1 volume along x axis, mm
   G4double d_Bot1; // inner diameter, mm
@@ -155,6 +163,7 @@ public:
   G4int MaterialBot1FormulaN[20]; // Numbers of atoms (by element) in chemical formula of MaterialBot1
   G4int MaterialBot1FormulaNum; // Number of atoms of given element in chemical formula of MaterialBot1
   G4int MaterialBot1NComponents; // Number of components in chemical formula of MaterialBot1
+  std::map<G4String, G4double> Bot1ElementSolution;
 
   G4double D_Bot2; // length of the Bot2 volume along x axis, mm
   G4double d_Bot2; // inner diameter, mm
@@ -169,6 +178,7 @@ public:
   G4int MaterialBot2FormulaN[20]; // Numbers of atoms (by element) in chemical formula of MaterialBot2
   G4int MaterialBot2FormulaNum; // Number of atoms of given element in chemical formula of MaterialBot2
   G4int MaterialBot2NComponents; // Number of components in chemical formula of MaterialBot2
+  std::map<G4String, G4double> Bot2ElementSolution;
 
   G4double D_Bot3; // length of the Bot3 volume along x axis, mm
   G4double d_Bot3; // inner diameter, mm

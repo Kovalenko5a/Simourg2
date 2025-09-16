@@ -1,8 +1,11 @@
 build/
 build_2/
 build15/
+build*/
 
 .vscode
 
 *.dat
 *PNG
+*.exe
+*.recipe

@@ -123,6 +123,8 @@ SimourgGlobal::SimourgGlobal()
   MaterialBot3ElementNames[0] = "N";
   MaterialBot3FormulaN[0] = 2;
   MaterialBot3NComponents = 0;
+  Bot3ElementSolution["N"] = 80.1;
+  Bot3ElementSolution["O"] = 19.9;
 
 	AlphaBeta=1.;
 	tMin=0.*s;

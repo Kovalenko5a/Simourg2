@@ -990,6 +990,11 @@ SimourgMessenger::SimourgMessenger(SimourgGlobal* gl1)
   MaterialBot1ElementNameCmd->SetParameterName("MaterialBot1ElementName",omittable=false);
   MaterialBot1ElementNameCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 
+  MaterialBot1WeightCmd = new G4UIcmdWithAString("/user/MaterialBot1Weight", this);
+  MaterialBot1WeightCmd->SetGuidance("\tProvide element-weight pairs. Example: Cd 1000 W 100 O 10");
+  MaterialBot1WeightCmd->SetParameterName("MaterialBot1Weight", false);
+  MaterialBot1WeightCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+
   MaterialBot1FormulaNumCmd = new G4UIcmdWithAnInteger("/user/MaterialBot1FormulaNum",this);  
   MaterialBot1FormulaNumCmd->SetGuidance("\tNumber of atoms of chemical element in the formula.");
   MaterialBot1FormulaNumCmd->SetDefaultValue (1);
@@ -1079,6 +1084,11 @@ SimourgMessenger::SimourgMessenger(SimourgGlobal* gl1)
   MaterialBot2ElementNameCmd->SetCandidates("H He Li Be B C N O F Ne Na Mg Al Si P S Cl Ar K Ca Sc Ti V Cr Mn Fe Co Ni Cu Zn Ga Ge As Se Br Kr Rb Sr Y Zr Nb Mo Tc Ru Rh Pd Ag Cd In Sn Sb Te I Xe Cs Ba La Ce Pr Nd Pm Sm Eu Gd Tb Dy Ho Er Tm Yb Lu Hf Ta W Re Os Ir Pt Au Hg Tl Pb Bi Po At Rn Fr Ra Ac Th Pa U Np Pu Am Cm Bk Cf Es Fm");
   MaterialBot2ElementNameCmd->SetParameterName("MaterialBot2ElementName",omittable=false);
   MaterialBot2ElementNameCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
+
+  MaterialBot2WeightCmd = new G4UIcmdWithAString("/user/MaterialBot2Weight", this);
+  MaterialBot2WeightCmd->SetGuidance("\tProvide element-weight pairs. Example: Cd 1000 W 100 O 10");
+  MaterialBot2WeightCmd->SetParameterName("MaterialBot2Weight", false);
+  MaterialBot2WeightCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
   MaterialBot2FormulaNumCmd = new G4UIcmdWithAnInteger("/user/MaterialBot2FormulaNum",this);  
   MaterialBot2FormulaNumCmd->SetGuidance("\tNumber of atoms of chemical element in the formula.");

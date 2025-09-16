@@ -1,0 +1,2 @@
+cmake .. -G "Visual Studio 16 2019" -A x64 -DXercesC_LIBRARY=C:/Users/111/Documents/Xerces/xerces-c-3.3.0/xerces-install/lib/xerces-c_3.lib -DXersesC_INCLUDE_DIR="C:/Users/111/Documents/Xerces/xerces-c-3.3.0/xerces-install/include"
+cmake --build . --config Release

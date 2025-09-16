@@ -192,17 +192,29 @@ private:
   G4UIcmdWithADouble* AlphaBetaCmd;
 
   G4UIcmdWithAnInteger* MaterialSHLDFormulaNumCmd;
+  G4UIcmdWithAString*   MaterialSHLDWeightCmd;
   G4UIcmdWithAnInteger* MaterialCover2FormulaNumCmd;
+  G4UIcmdWithAString*   MaterialCover2WeightCmd;
   G4UIcmdWithAnInteger* MaterialCover1FormulaNumCmd;
+  G4UIcmdWithAString*   MaterialCover1WeightCmd;
   G4UIcmdWithAnInteger* MaterialMarinelliFormulaNumCmd;
+  G4UIcmdWithAString*   MaterialMarinelliWeightCmd;
   G4UIcmdWithAnInteger* MaterialCoreFormulaNumCmd;
+  G4UIcmdWithAString*   MaterialCoreWeightCmd;
   G4UIcmdWithAnInteger* MaterialDetFormulaNumCmd;
+  G4UIcmdWithAString*   MaterialDetWeightCmd;
   G4UIcmdWithAnInteger* MaterialCavityFormulaNumCmd;
+  G4UIcmdWithAString*   MaterialCavityWeightCmd;
   G4UIcmdWithAnInteger* MaterialTop1FormulaNumCmd;
+  G4UIcmdWithAString*   MaterialTop1WeightCmd;
   G4UIcmdWithAnInteger* MaterialTop2FormulaNumCmd;
+  G4UIcmdWithAString*   MaterialTop2WeightCmd;
   G4UIcmdWithAnInteger* MaterialTop3FormulaNumCmd;
+  G4UIcmdWithAString*   MaterialTop3WeightCmd;
   G4UIcmdWithAnInteger* MaterialBot1FormulaNumCmd;
+  G4UIcmdWithAString*   MaterialBot1WeightCmd;
   G4UIcmdWithAnInteger* MaterialBot2FormulaNumCmd;
+  G4UIcmdWithAString*   MaterialBot2WeightCmd;
   G4UIcmdWithAnInteger* MaterialBot3FormulaNumCmd;
   G4UIcmdWithAString*   MaterialBot3WeightCmd;
 
