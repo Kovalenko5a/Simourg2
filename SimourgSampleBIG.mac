@@ -1,0 +1,161 @@
+# mac file for Simourg_1.4
+
+/user/init
+/user/showAll
+
+# Parameters of the passive shield
+
+/user/D_SHLD 150.00 mm
+/user/ZL_SHLD 150.00 mm  
+/user/MaterialSHLDDensity 8.96 g/cm3
+/user/MaterialSHLDElementName Cu
+/user/MaterialSHLDFormulaNum 1
+
+# Parameters of the Cover2 volume (alias: Marinelli; contains Cover1; omittable)
+
+#/user/D_Cover2 60.00 mm
+/user/XL_Cover2 60.00 mm
+/user/YL_Cover2 60.00 mm
+/user/ZL_Cover2 60.00 mm
+/user/Z_Cover2 0.00 mm
+/user/MaterialCover2Density 1.1 g/cm3
+/user/MaterialCover2ElementName C
+/user/MaterialCover2FormulaNum 1
+/user/MaterialCover2ElementName H
+/user/MaterialCover2FormulaNum 2
+
+
+# Parameters of the Cover1 volume  (alias: Core; contains Det; omittable)
+
+#/user/D_Cover1 55.00 mm
+/user/XL_Cover1 55.00 mm
+/user/YL_Cover1 55.00 mm
+/user/ZL_Cover1 55.00 mm
+/user/Z_Cover1 0.00 mm
+/user/MaterialCover1Density 1.1 g/cm3
+/user/MaterialCover1ElementName C
+/user/MaterialCover1FormulaNum 1
+/user/MaterialCover1ElementName H
+/user/MaterialCover1FormulaNum 2
+
+
+# Parameters of the Detector volume (Det; contains Cavity; not omittable)
+
+#/user/D_Det 50.00 mm
+/user/XL_Det 50.00 mm
+/user/YL_Det 50.00 mm
+/user/ZL_Det 50.00 mm
+/user/Z_Det 0.00 mm
+/user/MaterialDetDensity 8.0 g/cm3
+/user/MaterialDetElementName Cd
+/user/MaterialDetFormulaNum 1
+/user/MaterialDetElementName W
+/user/MaterialDetFormulaNum 1
+/user/MaterialDetElementName O
+/user/MaterialDetFormulaNum 4
+
+# Parameters of the Cavity volume (omittable)
+
+#/user/D_Cavity 5.00 mm
+/user/XL_Cavity 5.00 mm
+/user/YL_Cavity 5.00 mm
+/user/ZL_Cavity 5.00 mm
+/user/Z_Cavity 0.00 mm
+/user/MaterialCavityDensity 8.0 g/cm3
+/user/MaterialCavityElementName Cd
+/user/MaterialCavityFormulaNum 1
+/user/MaterialCavityElementName W
+/user/MaterialCavityFormulaNum 1
+/user/MaterialCavityElementName O
+/user/MaterialCavityFormulaNum 4
+
+# Parameters of the additional volumes (Top1-Top3, Bot1-Bot3)
+
+/user/D_Top1 60.00 mm
+/user/ZL_Top1 1.00 mm
+/user/Z_Top1 32.00 mm
+/user/MaterialTop1Density 10 g/cm3
+/user/MaterialTop1ElementName Cu
+/user/MaterialTop1FormulaNum 1
+
+/user/D_Top2 50.00 mm
+/user/ZL_Top2 1.00 mm
+/user/Z_Top2 34.00 mm
+/user/MaterialTop2Density 10 g/cm3
+/user/MaterialTop2ElementName Cu
+/user/MaterialTop2FormulaNum 1
+
+/user/D_Top3 40.00 mm
+/user/ZL_Top3 1.00 mm
+/user/Z_Top3 36.00 mm
+/user/MaterialTop3Density 10 g/cm3
+/user/MaterialTop3ElementName Cu
+/user/MaterialTop3FormulaNum 1
+
+/user/D_Bot1 60.00 mm
+/user/ZL_Bot1 1.00 mm
+/user/Z_Bot1 -32.00 mm
+/user/MaterialBot1Density 10 g/cm3
+/user/MaterialBot1ElementName Cu
+/user/MaterialBot1FormulaNum 1
+
+/user/D_Bot2 50.00 mm
+/user/ZL_Bot2 1.00 mm
+/user/Z_Bot2 -34.00 mm
+/user/MaterialBot2Density 10 g/cm3
+/user/MaterialBot2ElementName Cu
+/user/MaterialBot2FormulaNum 1
+
+/user/D_Bot3 40.00 mm
+/user/ZL_Bot3 1.00 mm
+/user/Z_Bot3 -36.00 mm
+/user/MaterialBot3Density 10 g/cm3
+/user/MaterialBot3ElementName Cu
+/user/MaterialBot3FormulaNum 1
+
+# Parameters of the Source quasivolume
+
+#/user/VolumeSrc Det
+#/user/D_Src 1.00 mm
+/user/XL_Src 1.00 mm
+/user/YL_Src 1.00 mm
+/user/ZL_Src 1.00 mm
+/user/X_Src 0.00 mm
+/user/Y_Src 0.00 mm
+/user/Z_Src 35.00 mm
+
+# Parameters of the UnSource quasivolume (is subtracted from the Source quasivolume)
+
+#/user/VolumeUnSrc Det
+/user/D_UnSrc 1.00 mm
+#/user/XL_UnSrc 1.00 mm
+#/user/YL_UnSrc 1.00 mm
+/user/ZL_UnSrc 1.00 mm
+/user/X_UnSrc 1.00 mm
+/user/Y_UnSrc 0.00 mm
+/user/Z_UnSrc 35.00 mm
+
+/user/EGamma 5000 keV  
+#/user/Decay0File c:/g4work/Decay0/Tl208.dat  
+#/user/Decay0File c:/g4work/Decay0/Pb214.dat  
+/user/FWHM1 0.0
+/user/FWHM2 1.0
+/user/Threshold 1.0 keV
+/user/ELowLimit 1.0 keV 
+/user/DELowLimit 1000.0 nm
+/user/DGLowLimit 1000.0 nm
+/user/ChannelWidth 10.0 keV
+/user/numberOfRuns 10
+/user/Step 100
+/user/RandomSeed 90115037
+/user/WaitCommand 0
+/user/VerboseVis 2
+/user/VerboseAll 6
+/user/DoPicture 1
+/user/tMin 0.0 s
+/user/tMax 10000000.0 s
+/user/AllowIsotropicRotation 1
+
+/user/PhysicsList FTFP_BERT_LIV
+
+/user/showAll

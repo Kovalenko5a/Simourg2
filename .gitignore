@@ -1,0 +1,8 @@
+build/
+build_2/
+build15/
+
+.vscode
+
+*.dat
+*PNG
