@@ -123,8 +123,8 @@ SimourgGlobal::SimourgGlobal()
   MaterialBot3ElementNames[0] = "N";
   MaterialBot3FormulaN[0] = 2;
   MaterialBot3NComponents = 0;
-  Bot3ElementSolution["N"] = 80.1;
-  Bot3ElementSolution["O"] = 19.9;
+  // Bot3ElementSolution["N"] = 80.1;
+  // Bot3ElementSolution["O"] = 19.9;
 
 	AlphaBeta=1.;
 	tMin=0.*s;
@@ -437,16 +437,16 @@ void SimourgGlobal::FineTuning(void)
     if(MaterialCavityDensity < 0.)
       Exception("\n\n\n### Density of Cavity is not defined!");
   }
-  if(MaterialSHLDNComponents == 0) MaterialSHLDNComponents=1;
-  if(MaterialCover2NComponents == 0) MaterialCover2NComponents=1;
-  if(MaterialCover1NComponents == 0) MaterialCover1NComponents=1;
-  if(MaterialCavityNComponents == 0) MaterialCavityNComponents=1;
-  if(MaterialTop1NComponents == 0) MaterialTop1NComponents=1;
-  if(MaterialTop2NComponents == 0) MaterialTop2NComponents=1;
-  if(MaterialTop3NComponents == 0) MaterialTop3NComponents=1;
-  if(MaterialBot1NComponents == 0) MaterialBot1NComponents=1;
-  if(MaterialBot2NComponents == 0) MaterialBot2NComponents=1;
-  if(MaterialBot3NComponents == 0) MaterialBot3NComponents=1;
+  // if(MaterialSHLDNComponents == 0) MaterialSHLDNComponents=1;
+  // if(MaterialCover2NComponents == 0) MaterialCover2NComponents=1;
+  // if(MaterialCover1NComponents == 0) MaterialCover1NComponents=1;
+  // if(MaterialCavityNComponents == 0) MaterialCavityNComponents=1;
+  // if(MaterialTop1NComponents == 0) MaterialTop1NComponents=1;
+  // if(MaterialTop2NComponents == 0) MaterialTop2NComponents=1;
+  // if(MaterialTop3NComponents == 0) MaterialTop3NComponents=1;
+  // if(MaterialBot1NComponents == 0) MaterialBot1NComponents=1;
+  // if(MaterialBot2NComponents == 0) MaterialBot2NComponents=1;
+  // if(MaterialBot3NComponents == 0) MaterialBot3NComponents=1;
 
   if(isTop1 && MaterialTop1Density <= 0)
   {

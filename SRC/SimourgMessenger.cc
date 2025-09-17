@@ -72,6 +72,11 @@ SimourgMessenger::SimourgMessenger(SimourgGlobal* gl1)
   MaterialSHLDElementNameCmd->SetParameterName("MaterialSHLDElementName",omittable=false);
   MaterialSHLDElementNameCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 
+  MaterialSHLDWeightCmd = new G4UIcmdWithAString("/user/MaterialSHLDWeight", this);
+  MaterialSHLDWeightCmd->SetGuidance("\tProvide element-weight pairs. Example: Cd 1000 W 100 O 10");
+  MaterialSHLDWeightCmd->SetParameterName("MaterialSHLDWeight", false);
+  MaterialSHLDWeightCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+
   MaterialSHLDFormulaNumCmd = new G4UIcmdWithAnInteger("/user/MaterialSHLDFormulaNum",this);  
   MaterialSHLDFormulaNumCmd->SetGuidance("\tNumber of atoms of chemical element in the formula.");
   MaterialSHLDFormulaNumCmd->SetDefaultValue (1);
@@ -172,6 +177,11 @@ SimourgMessenger::SimourgMessenger(SimourgGlobal* gl1)
   MaterialCover2ElementNameCmd->SetParameterName("MaterialCover2ElementName",omittable=false);
   MaterialCover2ElementNameCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 
+  MaterialCover2WeightCmd = new G4UIcmdWithAString("/user/MaterialCover2Weight", this);
+  MaterialCover2WeightCmd->SetGuidance("\tProvide element-weight pairs. Example: Cd 1000 W 100 O 10");
+  MaterialCover2WeightCmd->SetParameterName("MaterialCover2Weight", false);
+  MaterialCover2WeightCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+
   MaterialCover2FormulaNumCmd = new G4UIcmdWithAnInteger("/user/MaterialCover2FormulaNum",this);  
   MaterialCover2FormulaNumCmd->SetGuidance("\tNumber of atoms of chemical element in the formula.");
   MaterialCover2FormulaNumCmd->SetDefaultValue (1);
@@ -262,6 +272,11 @@ SimourgMessenger::SimourgMessenger(SimourgGlobal* gl1)
   MaterialMarinelliElementNameCmd->SetCandidates("H He Li Be B C N O F Ne Na Mg Al Si P S Cl Ar K Ca Sc Ti V Cr Mn Fe Co Ni Cu Zn Ga Ge As Se Br Kr Rb Sr Y Zr Nb Mo Tc Ru Rh Pd Ag Cd In Sn Sb Te I Xe Cs Ba La Ce Pr Nd Pm Sm Eu Gd Tb Dy Ho Er Tm Yb Lu Hf Ta W Re Os Ir Pt Au Hg Tl Pb Bi Po At Rn Fr Ra Ac Th Pa U Np Pu Am Cm Bk Cf Es Fm");
   MaterialMarinelliElementNameCmd->SetParameterName("MaterialMarinelliElementName",omittable=false);
   MaterialMarinelliElementNameCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
+
+  MaterialMarinelliWeightCmd = new G4UIcmdWithAString("/user/MaterialMarinelliWeight", this);
+  MaterialMarinelliWeightCmd->SetGuidance("\tProvide element-weight pairs. Example: Cd 1000 W 100 O 10");
+  MaterialMarinelliWeightCmd->SetParameterName("MaterialMarinelliWeight", false);
+  MaterialMarinelliWeightCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
   MaterialMarinelliFormulaNumCmd = new G4UIcmdWithAnInteger("/user/MaterialMarinelliFormulaNum",this);  
   MaterialMarinelliFormulaNumCmd->SetGuidance("\tNumber of atoms of chemical element in the formula.");
@@ -362,6 +377,11 @@ SimourgMessenger::SimourgMessenger(SimourgGlobal* gl1)
   MaterialCover1ElementNameCmd->SetParameterName("MaterialCover1ElementName",omittable=false);
   MaterialCover1ElementNameCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 
+  MaterialCover1WeightCmd = new G4UIcmdWithAString("/user/MaterialCover1Weight", this);
+  MaterialCover1WeightCmd->SetGuidance("\tProvide element-weight pairs. Example: Cd 1000 W 100 O 10");
+  MaterialCover1WeightCmd->SetParameterName("MaterialCover1Weight", false);
+  MaterialCover1WeightCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+
   MaterialCover1FormulaNumCmd = new G4UIcmdWithAnInteger("/user/MaterialCover1FormulaNum",this);  
   MaterialCover1FormulaNumCmd->SetGuidance("\tNumber of atoms of chemical element in the formula.");
   MaterialCover1FormulaNumCmd->SetDefaultValue (1);
@@ -452,6 +472,11 @@ SimourgMessenger::SimourgMessenger(SimourgGlobal* gl1)
   MaterialCoreElementNameCmd->SetCandidates("H He Li Be B C N O F Ne Na Mg Al Si P S Cl Ar K Ca Sc Ti V Cr Mn Fe Co Ni Cu Zn Ga Ge As Se Br Kr Rb Sr Y Zr Nb Mo Tc Ru Rh Pd Ag Cd In Sn Sb Te I Xe Cs Ba La Ce Pr Nd Pm Sm Eu Gd Tb Dy Ho Er Tm Yb Lu Hf Ta W Re Os Ir Pt Au Hg Tl Pb Bi Po At Rn Fr Ra Ac Th Pa U Np Pu Am Cm Bk Cf Es Fm");
   MaterialCoreElementNameCmd->SetParameterName("MaterialCoreElementName",omittable=false);
   MaterialCoreElementNameCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
+
+  MaterialCoreWeightCmd = new G4UIcmdWithAString("/user/MaterialCoreWeight", this);
+  MaterialCoreWeightCmd->SetGuidance("\tProvide element-weight pairs. Example: Cd 1000 W 100 O 10");
+  MaterialCoreWeightCmd->SetParameterName("MaterialCoreWeight", false);
+  MaterialCoreWeightCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
   MaterialCoreFormulaNumCmd = new G4UIcmdWithAnInteger("/user/MaterialCoreFormulaNum",this);  
   MaterialCoreFormulaNumCmd->SetGuidance("\tNumber of atoms of chemical element in the formula.");
@@ -545,6 +570,11 @@ SimourgMessenger::SimourgMessenger(SimourgGlobal* gl1)
   MaterialDetElementNameCmd->SetParameterName("MaterialDetElementName",omittable=false);
   MaterialDetElementNameCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 
+  MaterialDetWeightCmd = new G4UIcmdWithAString("/user/MaterialDetWeight", this);
+  MaterialDetWeightCmd->SetGuidance("\tProvide element-weight pairs. Example: Cd 1000 W 100 O 10");
+  MaterialDetWeightCmd->SetParameterName("MaterialDetWeight", false);
+  MaterialDetWeightCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+
   MaterialDetFormulaNumCmd = new G4UIcmdWithAnInteger("/user/MaterialDetFormulaNum",this);  
   MaterialDetFormulaNumCmd->SetGuidance("\tNumber of atoms of chemical element in the formula.");
   MaterialDetFormulaNumCmd->SetDefaultValue (1);
@@ -625,6 +655,11 @@ SimourgMessenger::SimourgMessenger(SimourgGlobal* gl1)
   MaterialCavityElementNameCmd->SetCandidates("H He Li Be B C N O F Ne Na Mg Al Si P S Cl Ar K Ca Sc Ti V Cr Mn Fe Co Ni Cu Zn Ga Ge As Se Br Kr Rb Sr Y Zr Nb Mo Tc Ru Rh Pd Ag Cd In Sn Sb Te I Xe Cs Ba La Ce Pr Nd Pm Sm Eu Gd Tb Dy Ho Er Tm Yb Lu Hf Ta W Re Os Ir Pt Au Hg Tl Pb Bi Po At Rn Fr Ra Ac Th Pa U Np Pu Am Cm Bk Cf Es Fm");
   MaterialCavityElementNameCmd->SetParameterName("MaterialCavityElementName",omittable=false);
   MaterialCavityElementNameCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
+
+  MaterialCavityWeightCmd = new G4UIcmdWithAString("/user/MaterialCavityWeight", this);
+  MaterialCavityWeightCmd->SetGuidance("\tProvide element-weight pairs. Example: Cd 1000 W 100 O 10");
+  MaterialCavityWeightCmd->SetParameterName("MaterialCavityWeight", false);
+  MaterialCavityWeightCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
   MaterialCavityFormulaNumCmd = new G4UIcmdWithAnInteger("/user/MaterialCavityFormulaNum",this);  
   MaterialCavityFormulaNumCmd->SetGuidance("\tNumber of atoms of chemical element in the formula.");
@@ -718,6 +753,11 @@ SimourgMessenger::SimourgMessenger(SimourgGlobal* gl1)
   MaterialTop1ElementNameCmd->SetParameterName("MaterialTop1ElementName",omittable=false);
   MaterialTop1ElementNameCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 
+  MaterialTop1WeightCmd = new G4UIcmdWithAString("/user/MaterialTop1Weight", this);
+  MaterialTop1WeightCmd->SetGuidance("\tProvide element-weight pairs. Example: Cd 1000 W 100 O 10");
+  MaterialTop1WeightCmd->SetParameterName("MaterialTop1Weight", false);
+  MaterialTop1WeightCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+
   MaterialTop1FormulaNumCmd = new G4UIcmdWithAnInteger("/user/MaterialTop1FormulaNum",this);  
   MaterialTop1FormulaNumCmd->SetGuidance("\tNumber of atoms of chemical element in the formula.");
   MaterialTop1FormulaNumCmd->SetDefaultValue (1);
@@ -809,6 +849,11 @@ SimourgMessenger::SimourgMessenger(SimourgGlobal* gl1)
   MaterialTop2ElementNameCmd->SetParameterName("MaterialTop2ElementName",omittable=false);
   MaterialTop2ElementNameCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 
+  MaterialTop2WeightCmd = new G4UIcmdWithAString("/user/MaterialTop2Weight", this);
+  MaterialTop2WeightCmd->SetGuidance("\tProvide element-weight pairs. Example: Cd 1000 W 100 O 10");
+  MaterialTop2WeightCmd->SetParameterName("MaterialTop2Weight", false);
+  MaterialTop2WeightCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+
   MaterialTop2FormulaNumCmd = new G4UIcmdWithAnInteger("/user/MaterialTop2FormulaNum",this);  
   MaterialTop2FormulaNumCmd->SetGuidance("\tNumber of atoms of chemical element in the formula.");
   MaterialTop2FormulaNumCmd->SetDefaultValue (1);
@@ -899,6 +944,11 @@ SimourgMessenger::SimourgMessenger(SimourgGlobal* gl1)
   MaterialTop3ElementNameCmd->SetCandidates("H He Li Be B C N O F Ne Na Mg Al Si P S Cl Ar K Ca Sc Ti V Cr Mn Fe Co Ni Cu Zn Ga Ge As Se Br Kr Rb Sr Y Zr Nb Mo Tc Ru Rh Pd Ag Cd In Sn Sb Te I Xe Cs Ba La Ce Pr Nd Pm Sm Eu Gd Tb Dy Ho Er Tm Yb Lu Hf Ta W Re Os Ir Pt Au Hg Tl Pb Bi Po At Rn Fr Ra Ac Th Pa U Np Pu Am Cm Bk Cf Es Fm");
   MaterialTop3ElementNameCmd->SetParameterName("MaterialTop3ElementName",omittable=false);
   MaterialTop3ElementNameCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
+
+  MaterialTop3WeightCmd = new G4UIcmdWithAString("/user/MaterialTop3Weight", this);
+  MaterialTop3WeightCmd->SetGuidance("\tProvide element-weight pairs. Example: Cd 1000 W 100 O 10");
+  MaterialTop3WeightCmd->SetParameterName("MaterialTop3Weight", false);
+  MaterialTop3WeightCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
   MaterialTop3FormulaNumCmd = new G4UIcmdWithAnInteger("/user/MaterialTop3FormulaNum",this);  
   MaterialTop3FormulaNumCmd->SetGuidance("\tNumber of atoms of chemical element in the formula.");
@@ -1777,6 +1827,17 @@ void SimourgMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     gl.MaterialSHLDFormulaN[gl.MaterialSHLDNComponents] = gl.MaterialSHLDFormulaNum;
     gl.MaterialSHLDNComponents++;
   }
+
+  if (command == MaterialSHLDWeightCmd) {
+  std::istringstream iss(newValue);
+  G4String element;
+  G4double weight;
+
+  while (iss >> element >> weight) {
+    gl.SHLDElementSolution[element] = weight;
+  }
+}
+
   if( command == ZL_SHLDCmd || command == D_SHLDCmd ||
       command == MaterialSHLDDensityCmd || command == MaterialSHLDElementNameCmd ||
       command == MaterialSHLDFormulaNumCmd ) gl.isSHLD=true;
@@ -1873,6 +1934,27 @@ void SimourgMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     gl.MaterialCover2FormulaN[gl.MaterialCover2NComponents] = gl.MaterialCover2FormulaNum;
     gl.MaterialCover2NComponents++;
   }
+
+  if (command == MaterialCover2WeightCmd) {
+  std::istringstream iss(newValue);
+  G4String element;
+  G4double weight;
+
+  while (iss >> element >> weight) {
+    gl.Cover2ElementSolution[element] = weight;
+  }
+}
+
+  if (command == MaterialMarinelliWeightCmd) {
+  std::istringstream iss(newValue);
+  G4String element;
+  G4double weight;
+
+  while (iss >> element >> weight) {
+    gl.Cover2ElementSolution[element] = weight;
+  }
+}
+
   if( command == XL_Cover2Cmd || command == YL_Cover2Cmd || command == ZL_Cover2Cmd || 
       command == D_Cover2Cmd || command == Z_Cover2Cmd ||
       command == MaterialCover2DensityCmd || command == MaterialCover2ElementNameCmd ||
@@ -1974,6 +2056,9 @@ void SimourgMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     gl.MaterialCover1FormulaN[gl.MaterialCover1NComponents] = gl.MaterialCover1FormulaNum;
     gl.MaterialCover1NComponents++;
   }
+
+ 
+
   if( command == MaterialCoreFormulaNumCmd )
   {
     if(gl.iFlag == 0)
@@ -1984,6 +2069,27 @@ void SimourgMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     gl.MaterialCover1FormulaN[gl.MaterialCover1NComponents] = gl.MaterialCover1FormulaNum;
     gl.MaterialCover1NComponents++;
   }
+
+ if (command == MaterialCover1WeightCmd) {
+  std::istringstream iss(newValue);
+  G4String element;
+  G4double weight;
+
+  while (iss >> element >> weight) {
+    gl.Cover1ElementSolution[element] = weight;
+  }
+}
+
+  if (command == MaterialCoreWeightCmd) {
+  std::istringstream iss(newValue);
+  G4String element;
+  G4double weight;
+
+  while (iss >> element >> weight) {
+    gl.Cover1ElementSolution[element] = weight;
+  }
+}
+
   if( command == XL_Cover1Cmd || command == YL_Cover1Cmd || command == ZL_Cover1Cmd || 
       command == D_Cover1Cmd || command == Z_Cover1Cmd ||
       command == MaterialCover1DensityCmd || command == MaterialCover1ElementNameCmd ||
@@ -2046,6 +2152,17 @@ void SimourgMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     gl.MaterialDetFormulaN[gl.MaterialDetNComponents] = gl.MaterialDetFormulaNum;
     gl.MaterialDetNComponents++;
   }
+
+  if (command == MaterialDetWeightCmd) {
+  std::istringstream iss(newValue);
+  G4String element;
+  G4double weight;
+
+  while (iss >> element >> weight) {
+    gl.DetElementSolution[element] = weight;
+  }
+}
+
   if( command == XL_DetCmd || command == YL_DetCmd || command == ZL_DetCmd || 
       command == D_DetCmd || command == Z_DetCmd ||
       command == MaterialDetDensityCmd || command == MaterialDetElementNameCmd ||
@@ -2099,6 +2216,17 @@ void SimourgMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     gl.MaterialCavityFormulaN[gl.MaterialCavityNComponents] = gl.MaterialCavityFormulaNum;
     gl.MaterialCavityNComponents++;
   }
+
+  if (command == MaterialCavityWeightCmd) {
+  std::istringstream iss(newValue);
+  G4String element;
+  G4double weight;
+
+  while (iss >> element >> weight) {
+    gl.CavityElementSolution[element] = weight;
+  }
+}
+
   if( command == XL_CavityCmd || command == YL_CavityCmd || command == ZL_CavityCmd ||
 			command == D_CavityCmd || command == Z_CavityCmd ||
       command == MaterialCavityDensityCmd || command == MaterialCavityElementNameCmd ||
@@ -2144,6 +2272,17 @@ void SimourgMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     gl.MaterialTop1FormulaN[gl.MaterialTop1NComponents] = gl.MaterialTop1FormulaNum;
     gl.MaterialTop1NComponents++;
   }
+
+  if (command == MaterialTop1WeightCmd) {
+  std::istringstream iss(newValue);
+  G4String element;
+  G4double weight;
+
+  while (iss >> element >> weight) {
+    gl.Top1ElementSolution[element] = weight;
+  }
+}
+
   if( command == D_Top1Cmd || command == ZL_Top1Cmd || command == Z_Top1Cmd ||
       command == MaterialTop1DensityCmd || command == MaterialTop1ElementNameCmd ||
       command == MaterialTop1FormulaNumCmd ) gl.isTop1=true; 
@@ -2188,6 +2327,15 @@ void SimourgMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     gl.MaterialTop2FormulaN[gl.MaterialTop2NComponents] = gl.MaterialTop2FormulaNum;
     gl.MaterialTop2NComponents++;
   }
+    if (command == MaterialTop2WeightCmd) {
+  std::istringstream iss(newValue);
+  G4String element;
+  G4double weight;
+
+  while (iss >> element >> weight) {
+    gl.Top2ElementSolution[element] = weight;
+  }
+}
   if( command == D_Top2Cmd || command == ZL_Top2Cmd || command == Z_Top2Cmd ||
       command == MaterialTop2DensityCmd || command == MaterialTop2ElementNameCmd ||
       command == MaterialTop2FormulaNumCmd ) gl.isTop2=true;
@@ -2231,6 +2379,16 @@ void SimourgMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     gl.MaterialTop3FormulaN[gl.MaterialTop3NComponents] = gl.MaterialTop3FormulaNum;
     gl.MaterialTop3NComponents++;
   }
+  if (command == MaterialTop3WeightCmd) {
+  std::istringstream iss(newValue);
+  G4String element;
+  G4double weight;
+
+  while (iss >> element >> weight) {
+    gl.Top3ElementSolution[element] = weight;
+  }
+}
+
   if( command == D_Top3Cmd || command == ZL_Top3Cmd || command == Z_Top3Cmd ||
       command == MaterialTop3DensityCmd || command == MaterialTop3ElementNameCmd ||
       command == MaterialTop3FormulaNumCmd ) gl.isTop3=true;
@@ -2274,6 +2432,18 @@ void SimourgMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     gl.MaterialBot1FormulaN[gl.MaterialBot1NComponents] = gl.MaterialBot1FormulaNum;
     gl.MaterialBot1NComponents++;
   }
+
+  if (command == MaterialBot1WeightCmd) {
+  std::istringstream iss(newValue);
+  G4String element;
+  G4double weight;
+
+  while (iss >> element >> weight) {
+    gl.Bot1ElementSolution[element] = weight;
+  }
+}
+
+
   if( command == D_Bot1Cmd || command == ZL_Bot1Cmd || command == Z_Bot1Cmd ||
       command == MaterialBot1DensityCmd || command == MaterialBot1ElementNameCmd ||
       command == MaterialBot1FormulaNumCmd ) gl.isBot1=true;
@@ -2318,6 +2488,18 @@ void SimourgMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     gl.MaterialBot2FormulaN[gl.MaterialBot2NComponents] = gl.MaterialBot2FormulaNum;
     gl.MaterialBot2NComponents++;
   }
+
+  if (command == MaterialBot2WeightCmd) {
+  std::istringstream iss(newValue);
+  G4String element;
+  G4double weight;
+
+  while (iss >> element >> weight) {
+    gl.Bot2ElementSolution[element] = weight;
+  }
+}
+
+
   if( command == D_Bot2Cmd || command == ZL_Bot2Cmd || command == Z_Bot2Cmd ||
       command == MaterialBot2DensityCmd || command == MaterialBot2ElementNameCmd ||
       command == MaterialBot2FormulaNumCmd ) gl.isBot2=true;
@@ -3088,7 +3270,7 @@ void SimourgMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     gl.ZL_Bot3 = 0.001*mm;
     gl.MaterialBot3Density = 1.e-10*g/cm3;
     gl.MaterialBot3ElementNames[0] = "N";
-    gl.MaterialBot3FormulaN[0] = 1;
+    // gl.MaterialBot3FormulaN[0] = 1;
     gl.MaterialBot3NComponents = 0;
 
     gl.X_Src = 0;

@@ -1,3 +1,4 @@
+#include <numeric>
 
 #include "G4Element.hh"
 #include "G4NistManager.hh"
@@ -53,127 +54,618 @@ G4RotationMatrix* rotation = new G4RotationMatrix();
 
   G4cout << "### Chemical elements created " << G4endl;
 
-  G4Material* MaterialSHLD = new G4Material(name="MaterialSHLD", 
-		density=gl.MaterialSHLDDensity, ncomponents=gl.MaterialSHLDNComponents);
+//   G4Material* MaterialSHLD = new G4Material(name="MaterialSHLD", 
+// 		density=gl.MaterialSHLDDensity, ncomponents=gl.MaterialSHLDNComponents);
+// 	for(i=0; i < ncomponents; i++)
+// 	{
+
+// 		MaterialSHLD->AddElement( NIST->FindOrBuildElement(gl.MaterialSHLDElementNames[i], true), 
+// 		natoms=gl.MaterialSHLDFormulaN[i]);
+// 	}
+// 	if(gl.VerboseAll > 0)
+// 		G4cout << "### MaterialSHLD created with " << ncomponents << " components"  << G4endl;
+
+
+///////////////SHLD Material Init
+	G4Material* MaterialSHLD = new G4Material(name="MaterialSHLD", 
+		density=(gl.isSHLD ? gl.MaterialSHLDDensity : 1.0*g/cm3 ), 
+		ncomponents=(gl.MaterialSHLDNComponents!=0 ? gl.MaterialSHLDNComponents : 
+		 !gl.SHLDElementSolution.empty()?  gl.SHLDElementSolution.size():1));
+	if(gl.MaterialSHLDNComponents!=0){
 	for(i=0; i < ncomponents; i++)
 	{
-
 		MaterialSHLD->AddElement( NIST->FindOrBuildElement(gl.MaterialSHLDElementNames[i], true), 
-		natoms=gl.MaterialSHLDFormulaN[i]);
+			natoms=gl.MaterialSHLDFormulaN[i]);
 	}
-	if(gl.VerboseAll > 0)
-		G4cout << "### MaterialSHLD created with " << ncomponents << " components"  << G4endl;
+	if(gl.VerboseAll > 0) {G4cout << "### MaterialSHLD created with " << ncomponents << " atomic components"  << G4endl;
+			const G4ElementVector* elems = MaterialSHLD->GetElementVector();
+			const G4int* fracs = MaterialSHLD->GetAtomsVector();
+			for (G4int i=0; i<MaterialSHLD->GetNumberOfElements(); ++i) {
+    		std::cout << "  " << (*elems)[i]->GetName()
+              << " Z=" << (*elems)[i]->GetZ()
+              << ", Atoms =" << fracs[i] << "\n";
+			}
+		}
+	
+	}
+	else if(!gl.SHLDElementSolution.empty()){
+	G4cout << "Parsed MaterialSHLDWeight values:\n";
+	double sum = std::accumulate(
+        gl.SHLDElementSolution.begin(), gl.SHLDElementSolution.end(), 0.0,
+        [](double total, const std::pair<const std::string, double>& p){
+            return total + p.second;
+        }
+    );
+	for (const auto& entry : gl.SHLDElementSolution) 
+	{
+  		G4cout << "\tElement: " << entry.first << ", Weight: " << entry.second << G4endl;
+		MaterialSHLD->AddElement( NIST->FindOrBuildElement(entry.first, true), 
+		entry.second/sum);
+	}
+	if(gl.VerboseAll > 0) {G4cout << "### MaterialSHLD created with " << ncomponents << " mass components"  << G4endl;
+		const G4ElementVector* elems = MaterialSHLD->GetElementVector();
+		const G4double* fracs = MaterialSHLD->GetFractionVector();
+		for (G4int i=0; i<MaterialSHLD->GetNumberOfElements(); ++i) {
+    		std::cout << "  " << (*elems)[i]->GetName()
+              << " Z=" << (*elems)[i]->GetZ()
+              << ", fractionMass=" << fracs[i] << "\n";
+			}
+		}
+	}
+///////////////SHLD Material Fin
 
-  G4Material* MaterialCover2 = new G4Material(name="MaterialCover2", 
-		density=gl.MaterialCover2Density, ncomponents=gl.MaterialCover2NComponents);
+//   G4Material* MaterialCover2 = new G4Material(name="MaterialCover2", 
+// 		density=gl.MaterialCover2Density, ncomponents=gl.MaterialCover2NComponents);
+// 	for(i=0; i < ncomponents; i++)
+// 	{
+// 		MaterialCover2->AddElement( NIST->FindOrBuildElement(gl.MaterialCover2ElementNames[i], true), 
+// 			natoms=gl.MaterialCover2FormulaN[i]);
+// 	}
+//   if(gl.VerboseAll > 0)
+// 		G4cout << "### MaterialCover2 created with " << ncomponents << " components"  << G4endl;
+
+///////////////Cover2 Material Init
+	G4Material* MaterialCover2 = new G4Material(name="MaterialCover2", 
+		density=(gl.isCover2 ? gl.MaterialCover2Density : 1.0*g/cm3 ), 
+		ncomponents=(gl.MaterialCover2NComponents!=0 ? gl.MaterialCover2NComponents : 
+		 !gl.Cover2ElementSolution.empty()?  gl.Cover2ElementSolution.size():1));
+	if(gl.MaterialCover2NComponents!=0){
 	for(i=0; i < ncomponents; i++)
 	{
 		MaterialCover2->AddElement( NIST->FindOrBuildElement(gl.MaterialCover2ElementNames[i], true), 
 			natoms=gl.MaterialCover2FormulaN[i]);
 	}
-  if(gl.VerboseAll > 0)
-		G4cout << "### MaterialCover2 created with " << ncomponents << " components"  << G4endl;
+	if(gl.VerboseAll > 0) {G4cout << "### MaterialCover2 created with " << ncomponents << " atomic components"  << G4endl;
+			const G4ElementVector* elems = MaterialCover2->GetElementVector();
+			const G4int* fracs = MaterialCover2->GetAtomsVector();
+			for (G4int i=0; i<MaterialCover2->GetNumberOfElements(); ++i) {
+    		std::cout << "  " << (*elems)[i]->GetName()
+              << " Z=" << (*elems)[i]->GetZ()
+              << ", Atoms =" << fracs[i] << "\n";
+			}
+		}
+	
+	}
+	else if(!gl.Cover2ElementSolution.empty()){
+	G4cout << "Parsed MaterialCover2Weight values:\n";
+	double sum = std::accumulate(
+        gl.Cover2ElementSolution.begin(), gl.Cover2ElementSolution.end(), 0.0,
+        [](double total, const std::pair<const std::string, double>& p){
+            return total + p.second;
+        }
+    );
+	for (const auto& entry : gl.Cover2ElementSolution) 
+	{
+  		G4cout << "\tElement: " << entry.first << ", Weight: " << entry.second << G4endl;
+		MaterialCover2->AddElement( NIST->FindOrBuildElement(entry.first, true), 
+		entry.second/sum);
+	}
+	if(gl.VerboseAll > 0) {G4cout << "### MaterialCover2 created with " << ncomponents << " mass components"  << G4endl;
+		const G4ElementVector* elems = MaterialCover2->GetElementVector();
+		const G4double* fracs = MaterialCover2->GetFractionVector();
+		for (G4int i=0; i<MaterialCover2->GetNumberOfElements(); ++i) {
+    		std::cout << "  " << (*elems)[i]->GetName()
+              << " Z=" << (*elems)[i]->GetZ()
+              << ", fractionMass=" << fracs[i] << "\n";
+			}
+		}
+	}
+///////////////Cover2 Material Fin
 
-  G4Material* MaterialCover1 = new G4Material(name="MaterialCover1", 
-		density=gl.MaterialCover1Density, ncomponents=gl.MaterialCover1NComponents);
+
+//   G4Material* MaterialCover1 = new G4Material(name="MaterialCover1", 
+// 		density=gl.MaterialCover1Density, ncomponents=gl.MaterialCover1NComponents);
+// 	for(i=0; i < ncomponents; i++)
+// 	{
+// 		MaterialCover1->AddElement( NIST->FindOrBuildElement(gl.MaterialCover1ElementNames[i], true), 
+// 			natoms=gl.MaterialCover1FormulaN[i]);
+// 	}
+//   if(gl.VerboseAll > 0)
+// 		G4cout << "### MaterialCover1 created with " << ncomponents << " components"  << G4endl;
+
+///////////////Cover1 Material Init
+	G4Material* MaterialCover1 = new G4Material(name="MaterialCover1", 
+		density=(gl.isCover1 ? gl.MaterialCover1Density : 1.0*g/cm3 ), 
+		ncomponents=(gl.MaterialCover1NComponents!=0 ? gl.MaterialCover1NComponents : 
+		 !gl.Cover1ElementSolution.empty()?  gl.Cover1ElementSolution.size():1));
+	if(gl.MaterialCover1NComponents!=0){
 	for(i=0; i < ncomponents; i++)
 	{
 		MaterialCover1->AddElement( NIST->FindOrBuildElement(gl.MaterialCover1ElementNames[i], true), 
 			natoms=gl.MaterialCover1FormulaN[i]);
 	}
-  if(gl.VerboseAll > 0)
-		G4cout << "### MaterialCover1 created with " << ncomponents << " components"  << G4endl;
+	if(gl.VerboseAll > 0) {G4cout << "### MaterialCover1 created with " << ncomponents << " atomic components"  << G4endl;
+			const G4ElementVector* elems = MaterialCover1->GetElementVector();
+			const G4int* fracs = MaterialCover1->GetAtomsVector();
+			for (G4int i=0; i<MaterialCover1->GetNumberOfElements(); ++i) {
+    		std::cout << "  " << (*elems)[i]->GetName()
+              << " Z=" << (*elems)[i]->GetZ()
+              << ", Atoms =" << fracs[i] << "\n";
+			}
+		}
+	
+	}
+	else if(!gl.Cover1ElementSolution.empty()){
+	G4cout << "Parsed MaterialCover1Weight values:\n";
+	double sum = std::accumulate(
+        gl.Cover1ElementSolution.begin(), gl.Cover1ElementSolution.end(), 0.0,
+        [](double total, const std::pair<const std::string, double>& p){
+            return total + p.second;
+        }
+    );
+	for (const auto& entry : gl.Cover1ElementSolution) 
+	{
+  		G4cout << "\tElement: " << entry.first << ", Weight: " << entry.second << G4endl;
+		MaterialCover1->AddElement( NIST->FindOrBuildElement(entry.first, true), 
+		entry.second/sum);
+	}
+	if(gl.VerboseAll > 0) {G4cout << "### MaterialCover1 created with " << ncomponents << " mass components"  << G4endl;
+		const G4ElementVector* elems = MaterialCover1->GetElementVector();
+		const G4double* fracs = MaterialCover1->GetFractionVector();
+		for (G4int i=0; i<MaterialCover1->GetNumberOfElements(); ++i) {
+    		std::cout << "  " << (*elems)[i]->GetName()
+              << " Z=" << (*elems)[i]->GetZ()
+              << ", fractionMass=" << fracs[i] << "\n";
+			}
+		}
+	}
+///////////////Cover1 Material Fin
 
+
+	// G4Material* MaterialDet = new G4Material(name="MaterialDet", 
+	// 	density=gl.MaterialDetDensity, ncomponents=gl.MaterialDetNComponents);
+	// for(i=0; i < ncomponents; i++)
+	// {
+	// 	MaterialDet->AddElement( NIST->FindOrBuildElement(gl.MaterialDetElementNames[i], true), 
+	// 		natoms=gl.MaterialDetFormulaN[i]);
+	// }
+	// if(gl.VerboseAll > 0)
+	// 	G4cout << "### MaterialDet  created with " << ncomponents << " components"  << G4endl;
+
+///////////////Det Material Init
 	G4Material* MaterialDet = new G4Material(name="MaterialDet", 
-		density=gl.MaterialDetDensity, ncomponents=gl.MaterialDetNComponents);
+		density=(gl.isDet ? gl.MaterialDetDensity : 1.0*g/cm3 ), 
+		ncomponents=(gl.MaterialDetNComponents!=0 ? gl.MaterialDetNComponents : 
+		 !gl.DetElementSolution.empty()?  gl.DetElementSolution.size():1));
+	if(gl.MaterialDetNComponents!=0){
 	for(i=0; i < ncomponents; i++)
 	{
 		MaterialDet->AddElement( NIST->FindOrBuildElement(gl.MaterialDetElementNames[i], true), 
 			natoms=gl.MaterialDetFormulaN[i]);
 	}
-	if(gl.VerboseAll > 0)
-		G4cout << "### MaterialDet  created with " << ncomponents << " components"  << G4endl;
+	if(gl.VerboseAll > 0) {G4cout << "### MaterialDet created with " << ncomponents << " atomic components"  << G4endl;
+			const G4ElementVector* elems = MaterialDet->GetElementVector();
+			const G4int* fracs = MaterialDet->GetAtomsVector();
+			for (G4int i=0; i<MaterialDet->GetNumberOfElements(); ++i) {
+    		std::cout << "  " << (*elems)[i]->GetName()
+              << " Z=" << (*elems)[i]->GetZ()
+              << ", Atoms =" << fracs[i] << "\n";
+			}
+		}
+	
+	}
+	else if(!gl.DetElementSolution.empty()){
+	G4cout << "Parsed MaterialDetWeight values:\n";
+	double sum = std::accumulate(
+        gl.DetElementSolution.begin(), gl.DetElementSolution.end(), 0.0,
+        [](double total, const std::pair<const std::string, double>& p){
+            return total + p.second;
+        }
+    );
+	for (const auto& entry : gl.DetElementSolution) 
+	{
+  		G4cout << "\tElement: " << entry.first << ", Weight: " << entry.second << G4endl;
+		MaterialDet->AddElement( NIST->FindOrBuildElement(entry.first, true), 
+		entry.second/sum);
+	}
+	if(gl.VerboseAll > 0) {G4cout << "### MaterialDet created with " << ncomponents << " mass components"  << G4endl;
+		const G4ElementVector* elems = MaterialDet->GetElementVector();
+		const G4double* fracs = MaterialDet->GetFractionVector();
+		for (G4int i=0; i<MaterialDet->GetNumberOfElements(); ++i) {
+    		std::cout << "  " << (*elems)[i]->GetName()
+              << " Z=" << (*elems)[i]->GetZ()
+              << ", fractionMass=" << fracs[i] << "\n";
+			}
+		}
+	}
+///////////////Det Material Fin
 
+	// G4Material* MaterialCavity = new G4Material(name="MaterialCavity", 
+	// 	density=(gl.isCavity ? gl.MaterialCavityDensity : 1.0*g/cm3 ), 
+	// 	ncomponents=(gl.isCavity ? gl.MaterialCavityNComponents : 1));
+	// for(i=0; i < ncomponents; i++)
+	// {
+	// 	MaterialCavity->AddElement( NIST->FindOrBuildElement(gl.MaterialCavityElementNames[i], true), 
+	// 		natoms=gl.MaterialCavityFormulaN[i]);
+	// }
+	// if(gl.VerboseAll > 0 && gl.isCavity)
+	//   G4cout << "### MaterialCavity created with " << ncomponents << " components"  << G4endl;
+
+///////////////Cavity Material Init
 	G4Material* MaterialCavity = new G4Material(name="MaterialCavity", 
 		density=(gl.isCavity ? gl.MaterialCavityDensity : 1.0*g/cm3 ), 
-		ncomponents=(gl.isCavity ? gl.MaterialCavityNComponents : 1));
+		ncomponents=(gl.MaterialCavityNComponents!=0 ? gl.MaterialCavityNComponents : 
+		 !gl.CavityElementSolution.empty()?  gl.CavityElementSolution.size():1));
+	if(gl.MaterialCavityNComponents!=0){
 	for(i=0; i < ncomponents; i++)
 	{
 		MaterialCavity->AddElement( NIST->FindOrBuildElement(gl.MaterialCavityElementNames[i], true), 
 			natoms=gl.MaterialCavityFormulaN[i]);
 	}
-	if(gl.VerboseAll > 0 && gl.isCavity)
-	  G4cout << "### MaterialCavity created with " << ncomponents << " components"  << G4endl;
+	if(gl.VerboseAll > 0) {G4cout << "### MaterialCavity created with " << ncomponents << " atomic components"  << G4endl;
+			const G4ElementVector* elems = MaterialCavity->GetElementVector();
+			const G4int* fracs = MaterialCavity->GetAtomsVector();
+			for (G4int i=0; i<MaterialCavity->GetNumberOfElements(); ++i) {
+    		std::cout << "  " << (*elems)[i]->GetName()
+              << " Z=" << (*elems)[i]->GetZ()
+              << ", Atoms =" << fracs[i] << "\n";
+			}
+		}
+	
+	}
+	else if(!gl.CavityElementSolution.empty()){
+	G4cout << "Parsed MaterialCavityWeight values:\n";
+	double sum = std::accumulate(
+        gl.CavityElementSolution.begin(), gl.CavityElementSolution.end(), 0.0,
+        [](double total, const std::pair<const std::string, double>& p){
+            return total + p.second;
+        }
+    );
+	for (const auto& entry : gl.CavityElementSolution) 
+	{
+  		G4cout << "\tElement: " << entry.first << ", Weight: " << entry.second << G4endl;
+		MaterialCavity->AddElement( NIST->FindOrBuildElement(entry.first, true), 
+		entry.second/sum);
+	}
+	if(gl.VerboseAll > 0) {G4cout << "### MaterialCavity created with " << ncomponents << " mass components"  << G4endl;
+		const G4ElementVector* elems = MaterialCavity->GetElementVector();
+		const G4double* fracs = MaterialCavity->GetFractionVector();
+		for (G4int i=0; i<MaterialCavity->GetNumberOfElements(); ++i) {
+    		std::cout << "  " << (*elems)[i]->GetName()
+              << " Z=" << (*elems)[i]->GetZ()
+              << ", fractionMass=" << fracs[i] << "\n";
+			}
+		}
+	}
+///////////////Cavity Material Fin
 
+
+	// G4Material* MaterialTop1 = new G4Material(name="MaterialTop1", 
+	// 	density=(gl.isTop1 ? gl.MaterialTop1Density : 1.0*g/cm3 ), 
+	// 	ncomponents=(gl.isTop1 ? gl.MaterialTop1NComponents : 1));
+	// for(i=0; i < ncomponents; i++)
+	// {
+	// 	MaterialTop1->AddElement( NIST->FindOrBuildElement(gl.MaterialTop1ElementNames[i], true), 
+	// 		natoms=gl.MaterialTop1FormulaN[i]);
+	// }
+	// if(gl.VerboseAll > 0 && gl.isTop1)
+	//   G4cout << "### MaterialTop1 created with " << ncomponents << " components"  << G4endl;
+///////////////Top1 Material Init
 	G4Material* MaterialTop1 = new G4Material(name="MaterialTop1", 
 		density=(gl.isTop1 ? gl.MaterialTop1Density : 1.0*g/cm3 ), 
-		ncomponents=(gl.isTop1 ? gl.MaterialTop1NComponents : 1));
+		ncomponents=(gl.MaterialTop1NComponents!=0 ? gl.MaterialTop1NComponents : 
+		 !gl.Top1ElementSolution.empty()?  gl.Top1ElementSolution.size():1));
+	if(gl.MaterialTop1NComponents!=0){
 	for(i=0; i < ncomponents; i++)
 	{
 		MaterialTop1->AddElement( NIST->FindOrBuildElement(gl.MaterialTop1ElementNames[i], true), 
 			natoms=gl.MaterialTop1FormulaN[i]);
 	}
-	if(gl.VerboseAll > 0 && gl.isTop1)
-	  G4cout << "### MaterialTop1 created with " << ncomponents << " components"  << G4endl;
-
+	if(gl.VerboseAll > 0) {G4cout << "### MaterialTop1 created with " << ncomponents << " atomic components"  << G4endl;
+			const G4ElementVector* elems = MaterialTop1->GetElementVector();
+			const G4int* fracs = MaterialTop1->GetAtomsVector();
+			for (G4int i=0; i<MaterialTop1->GetNumberOfElements(); ++i) {
+    		std::cout << "  " << (*elems)[i]->GetName()
+              << " Z=" << (*elems)[i]->GetZ()
+              << ", Atoms =" << fracs[i] << "\n";
+			}
+		}
+	
+	}
+	else if(!gl.Top1ElementSolution.empty()){
+	G4cout << "Parsed MaterialTop1Weight values:\n";
+	double sum = std::accumulate(
+        gl.Top1ElementSolution.begin(), gl.Top1ElementSolution.end(), 0.0,
+        [](double total, const std::pair<const std::string, double>& p){
+            return total + p.second;
+        }
+    );
+	for (const auto& entry : gl.Top1ElementSolution) 
+	{
+  		G4cout << "\tElement: " << entry.first << ", Weight: " << entry.second << G4endl;
+		MaterialTop1->AddElement( NIST->FindOrBuildElement(entry.first, true), 
+		entry.second/sum);
+	}
+	if(gl.VerboseAll > 0) {G4cout << "### MaterialTop1 created with " << ncomponents << " mass components"  << G4endl;
+		const G4ElementVector* elems = MaterialTop1->GetElementVector();
+		const G4double* fracs = MaterialTop1->GetFractionVector();
+		for (G4int i=0; i<MaterialTop1->GetNumberOfElements(); ++i) {
+    		std::cout << "  " << (*elems)[i]->GetName()
+              << " Z=" << (*elems)[i]->GetZ()
+              << ", fractionMass=" << fracs[i] << "\n";
+			}
+		}
+	}
+///////////////Top1 Material Fin
+	// G4Material* MaterialTop2 = new G4Material(name="MaterialTop2", 
+	// 	density=(gl.isTop2 ? gl.MaterialTop2Density : 1.0*g/cm3 ), 
+	// 	ncomponents=(gl.isTop2 ? gl.MaterialTop2NComponents : 1));
+	// for(i=0; i < ncomponents; i++)
+	// {
+	// 	MaterialTop2->AddElement( NIST->FindOrBuildElement(gl.MaterialTop2ElementNames[i], true), 
+	// 		natoms=gl.MaterialTop2FormulaN[i]);
+	// }
+	// if(gl.VerboseAll > 0 && gl.isTop2)
+	//   G4cout << "### MaterialTop2 created with " << ncomponents << " components"  << G4endl;
+///////////////Top2 Material Init
 	G4Material* MaterialTop2 = new G4Material(name="MaterialTop2", 
 		density=(gl.isTop2 ? gl.MaterialTop2Density : 1.0*g/cm3 ), 
-		ncomponents=(gl.isTop2 ? gl.MaterialTop2NComponents : 1));
+		ncomponents=(gl.MaterialTop2NComponents!=0 ? gl.MaterialTop2NComponents : 
+		 !gl.Top2ElementSolution.empty()?  gl.Top2ElementSolution.size():1));
+	if(gl.MaterialTop2NComponents!=0){
 	for(i=0; i < ncomponents; i++)
 	{
 		MaterialTop2->AddElement( NIST->FindOrBuildElement(gl.MaterialTop2ElementNames[i], true), 
 			natoms=gl.MaterialTop2FormulaN[i]);
 	}
-	if(gl.VerboseAll > 0 && gl.isTop2)
-	  G4cout << "### MaterialTop2 created with " << ncomponents << " components"  << G4endl;
+	if(gl.VerboseAll > 0) {G4cout << "### MaterialTop2 created with " << ncomponents << " atomic components"  << G4endl;
+			const G4ElementVector* elems = MaterialTop2->GetElementVector();
+			const G4int* fracs = MaterialTop2->GetAtomsVector();
+			for (G4int i=0; i<MaterialTop2->GetNumberOfElements(); ++i) {
+    		std::cout << "  " << (*elems)[i]->GetName()
+              << " Z=" << (*elems)[i]->GetZ()
+              << ", Atoms =" << fracs[i] << "\n";
+			}
+		}
+	
+	}
+	else if(!gl.Top2ElementSolution.empty()){
+	G4cout << "Parsed MaterialTop2Weight values:\n";
+	double sum = std::accumulate(
+        gl.Top2ElementSolution.begin(), gl.Top2ElementSolution.end(), 0.0,
+        [](double total, const std::pair<const std::string, double>& p){
+            return total + p.second;
+        }
+    );
+	for (const auto& entry : gl.Top2ElementSolution) 
+	{
+  		G4cout << "\tElement: " << entry.first << ", Weight: " << entry.second << G4endl;
+		MaterialTop2->AddElement( NIST->FindOrBuildElement(entry.first, true), 
+		entry.second/sum);
+	}
+	if(gl.VerboseAll > 0) {G4cout << "### MaterialTop2 created with " << ncomponents << " mass components"  << G4endl;
+		const G4ElementVector* elems = MaterialTop2->GetElementVector();
+		const G4double* fracs = MaterialTop2->GetFractionVector();
+		for (G4int i=0; i<MaterialTop2->GetNumberOfElements(); ++i) {
+    		std::cout << "  " << (*elems)[i]->GetName()
+              << " Z=" << (*elems)[i]->GetZ()
+              << ", fractionMass=" << fracs[i] << "\n";
+			}
+		}
+	}
+///////////////Top2 Material Fin
 
+	// G4Material* MaterialTop3 = new G4Material(name="MaterialTop3", 
+	// 	density=(gl.isTop3 ? gl.MaterialTop3Density : 1.0*g/cm3 ), 
+	// 	ncomponents=(gl.isTop3 ? gl.MaterialTop3NComponents : 1));
+	// for(i=0; i < ncomponents; i++)
+	// {
+	// 	MaterialTop3->AddElement( NIST->FindOrBuildElement(gl.MaterialTop3ElementNames[i], true), 
+	// 		natoms=gl.MaterialTop3FormulaN[i]);
+	// }
+	// if(gl.VerboseAll > 0 && gl.isTop3)
+	//   G4cout << "### MaterialTop3 created with " << ncomponents << " components"  << G4endl;
+///////////////Top3 Material Init
 	G4Material* MaterialTop3 = new G4Material(name="MaterialTop3", 
 		density=(gl.isTop3 ? gl.MaterialTop3Density : 1.0*g/cm3 ), 
-		ncomponents=(gl.isTop3 ? gl.MaterialTop3NComponents : 1));
+		ncomponents=(gl.MaterialTop3NComponents!=0 ? gl.MaterialTop3NComponents : 
+		 !gl.Top3ElementSolution.empty()?  gl.Top3ElementSolution.size():1));
+	if(gl.MaterialTop3NComponents!=0){
 	for(i=0; i < ncomponents; i++)
 	{
 		MaterialTop3->AddElement( NIST->FindOrBuildElement(gl.MaterialTop3ElementNames[i], true), 
 			natoms=gl.MaterialTop3FormulaN[i]);
 	}
-	if(gl.VerboseAll > 0 && gl.isTop3)
-	  G4cout << "### MaterialTop3 created with " << ncomponents << " components"  << G4endl;
+	if(gl.VerboseAll > 0) {G4cout << "### MaterialTop3 created with " << ncomponents << " atomic components"  << G4endl;
+			const G4ElementVector* elems = MaterialTop3->GetElementVector();
+			const G4int* fracs = MaterialTop3->GetAtomsVector();
+			for (G4int i=0; i<MaterialTop3->GetNumberOfElements(); ++i) {
+    		std::cout << "  " << (*elems)[i]->GetName()
+              << " Z=" << (*elems)[i]->GetZ()
+              << ", Atoms =" << fracs[i] << "\n";
+			}
+		}
+	
+	}
+	else if(!gl.Top3ElementSolution.empty()){
+	G4cout << "Parsed MaterialTop3Weight values:\n";
+	double sum = std::accumulate(
+        gl.Top3ElementSolution.begin(), gl.Top3ElementSolution.end(), 0.0,
+        [](double total, const std::pair<const std::string, double>& p){
+            return total + p.second;
+        }
+    );
+	for (const auto& entry : gl.Top3ElementSolution) 
+	{
+  		G4cout << "\tElement: " << entry.first << ", Weight: " << entry.second << G4endl;
+		MaterialTop3->AddElement( NIST->FindOrBuildElement(entry.first, true), 
+		entry.second/sum);
+	}
+	if(gl.VerboseAll > 0) {G4cout << "### MaterialTop3 created with " << ncomponents << " mass components"  << G4endl;
+		const G4ElementVector* elems = MaterialTop3->GetElementVector();
+		const G4double* fracs = MaterialTop3->GetFractionVector();
+		for (G4int i=0; i<MaterialTop3->GetNumberOfElements(); ++i) {
+    		std::cout << "  " << (*elems)[i]->GetName()
+              << " Z=" << (*elems)[i]->GetZ()
+              << ", fractionMass=" << fracs[i] << "\n";
+			}
+		}
+	}
+///////////////Top3 Material Fin
 
+	// G4Material* MaterialBot1 = new G4Material(name="MaterialBot1", 
+	// 	density=(gl.isBot1 ? gl.MaterialBot1Density : 1.0*g/cm3 ), 
+	// 	ncomponents=(gl.isBot1 ? gl.MaterialBot1NComponents : 1));
+	// for(i=0; i < ncomponents; i++)
+	// {
+	// 	MaterialBot1->AddElement( NIST->FindOrBuildElement(gl.MaterialBot1ElementNames[i], true), 
+	// 		natoms=gl.MaterialBot1FormulaN[i]);
+	// }
+	// if(gl.VerboseAll > 0 && gl.isBot1)
+	//   G4cout << "### MaterialBot1 created with " << ncomponents << " components"  << G4endl;
+///////////////Bot1 Material Init
 	G4Material* MaterialBot1 = new G4Material(name="MaterialBot1", 
 		density=(gl.isBot1 ? gl.MaterialBot1Density : 1.0*g/cm3 ), 
-		ncomponents=(gl.isBot1 ? gl.MaterialBot1NComponents : 1));
+		ncomponents=(gl.MaterialBot1NComponents!=0 ? gl.MaterialBot1NComponents : 
+		 !gl.Bot1ElementSolution.empty()?  gl.Bot1ElementSolution.size():1));
+	if(gl.MaterialBot1NComponents!=0){
 	for(i=0; i < ncomponents; i++)
 	{
 		MaterialBot1->AddElement( NIST->FindOrBuildElement(gl.MaterialBot1ElementNames[i], true), 
 			natoms=gl.MaterialBot1FormulaN[i]);
 	}
-	if(gl.VerboseAll > 0 && gl.isBot1)
-	  G4cout << "### MaterialBot1 created with " << ncomponents << " components"  << G4endl;
+	if(gl.VerboseAll > 0) {G4cout << "### MaterialBot1 created with " << ncomponents << " atomic components"  << G4endl;
+			const G4ElementVector* elems = MaterialBot1->GetElementVector();
+			const G4int* fracs = MaterialBot1->GetAtomsVector();
+			for (G4int i=0; i<MaterialBot1->GetNumberOfElements(); ++i) {
+    		std::cout << "  " << (*elems)[i]->GetName()
+              << " Z=" << (*elems)[i]->GetZ()
+              << ", Atoms =" << fracs[i] << "\n";
+			}
+		}
+	
+	}
+	else if(!gl.Bot1ElementSolution.empty()){
+	G4cout << "Parsed MaterialBot1Weight values:\n";
+	double sum = std::accumulate(
+        gl.Bot1ElementSolution.begin(), gl.Bot1ElementSolution.end(), 0.0,
+        [](double total, const std::pair<const std::string, double>& p){
+            return total + p.second;
+        }
+    );
+	for (const auto& entry : gl.Bot1ElementSolution) 
+	{
+  		G4cout << "\tElement: " << entry.first << ", Weight: " << entry.second << G4endl;
+		MaterialBot1->AddElement( NIST->FindOrBuildElement(entry.first, true), 
+		entry.second/sum);
+	}
+	if(gl.VerboseAll > 0) {G4cout << "### MaterialBot1 created with " << ncomponents << " mass components"  << G4endl;
+		const G4ElementVector* elems = MaterialBot1->GetElementVector();
+		const G4double* fracs = MaterialBot1->GetFractionVector();
+		for (G4int i=0; i<MaterialBot1->GetNumberOfElements(); ++i) {
+    		std::cout << "  " << (*elems)[i]->GetName()
+              << " Z=" << (*elems)[i]->GetZ()
+              << ", fractionMass=" << fracs[i] << "\n";
+			}
+		}
+	}
+///////////////Bot1 Material Fin
 
+///////////////Bot2 Material Init
 	G4Material* MaterialBot2 = new G4Material(name="MaterialBot2", 
 		density=(gl.isBot2 ? gl.MaterialBot2Density : 1.0*g/cm3 ), 
-		ncomponents=(gl.isBot2 ? gl.MaterialBot2NComponents : 1));
+		ncomponents=(gl.MaterialBot2NComponents!=0 ? gl.MaterialBot2NComponents : 
+		 !gl.Bot2ElementSolution.empty()?  gl.Bot2ElementSolution.size():1));
+	if(gl.MaterialBot2NComponents!=0){
 	for(i=0; i < ncomponents; i++)
 	{
 		MaterialBot2->AddElement( NIST->FindOrBuildElement(gl.MaterialBot2ElementNames[i], true), 
 			natoms=gl.MaterialBot2FormulaN[i]);
 	}
-	if(gl.VerboseAll > 0 && gl.isBot2)
-	  G4cout << "### MaterialBot2 created with " << ncomponents << " components"  << G4endl;
-///////////////
+	if(gl.VerboseAll > 0) {G4cout << "### MaterialBot2 created with " << ncomponents << " atomic components"  << G4endl;
+			const G4ElementVector* elems = MaterialBot2->GetElementVector();
+			const G4int* fracs = MaterialBot2->GetAtomsVector();
+			for (G4int i=0; i<MaterialBot2->GetNumberOfElements(); ++i) {
+    		std::cout << "  " << (*elems)[i]->GetName()
+              << " Z=" << (*elems)[i]->GetZ()
+              << ", Atoms =" << fracs[i] << "\n";
+			}
+		}
+	
+	}
+	else if(!gl.Bot2ElementSolution.empty()){
+	G4cout << "Parsed MaterialBot2Weight values:\n";
+	double sum = std::accumulate(
+        gl.Bot2ElementSolution.begin(), gl.Bot2ElementSolution.end(), 0.0,
+        [](double total, const std::pair<const std::string, double>& p){
+            return total + p.second;
+        }
+    );
+	for (const auto& entry : gl.Bot2ElementSolution) 
+	{
+  		G4cout << "\tElement: " << entry.first << ", Weight: " << entry.second << G4endl;
+		MaterialBot2->AddElement( NIST->FindOrBuildElement(entry.first, true), 
+		entry.second/sum);
+	}
+	if(gl.VerboseAll > 0) {G4cout << "### MaterialBot2 created with " << ncomponents << " mass components"  << G4endl;
+		const G4ElementVector* elems = MaterialBot2->GetElementVector();
+		const G4double* fracs = MaterialBot2->GetFractionVector();
+		for (G4int i=0; i<MaterialBot2->GetNumberOfElements(); ++i) {
+    		std::cout << "  " << (*elems)[i]->GetName()
+              << " Z=" << (*elems)[i]->GetZ()
+              << ", fractionMass=" << fracs[i] << "\n";
+			}
+		}
+	}
+///////////////Bot2 Material Fin
+///////////////Bot3 Meterial Init
 	G4Material* MaterialBot3 = new G4Material(name="MaterialBot3", 
 		density=(gl.isBot3 ? gl.MaterialBot3Density : 1.0*g/cm3 ), 
-		ncomponents=(gl.isBot3 ? gl.MaterialBot3NComponents : 1));
+		ncomponents=(gl.MaterialBot3NComponents!=0 ? gl.MaterialBot3NComponents : 
+		 !gl.Bot3ElementSolution.empty()?  gl.Bot3ElementSolution.size():1));
+	if(gl.MaterialBot3NComponents!=0){
 	for(i=0; i < ncomponents; i++)
 	{
 		MaterialBot3->AddElement( NIST->FindOrBuildElement(gl.MaterialBot3ElementNames[i], true), 
 			natoms=gl.MaterialBot3FormulaN[i]);
 	}
+	if(gl.VerboseAll > 0) G4cout << "### MaterialBot3 created with " << ncomponents << " atomic components"  << G4endl;
+	}
+	else if(!gl.Bot3ElementSolution.empty()){
 	G4cout << "Parsed MaterialBot3Weight values:\n";
-for (const auto& entry : gl.Bot3ElementSolution) {
-  G4cout << "\tElement: " << entry.first << ", Weight: " << entry.second << G4endl;
-}
-	if(gl.VerboseAll > 0 && gl.isBot3)
-	  G4cout << "### MaterialBot3 created with " << ncomponents << " components"  << G4endl;
+	double sum = std::accumulate(
+        gl.Bot3ElementSolution.begin(), gl.Bot3ElementSolution.end(), 0.0,
+        [](double total, const std::pair<const std::string, double>& p){
+            return total + p.second;
+        }
+    );
+	for (const auto& entry : gl.Bot3ElementSolution) 
+	{
+  		G4cout << "\tElement: " << entry.first << ", Weight: " << entry.second << G4endl;
+		MaterialBot3->AddElement( NIST->FindOrBuildElement(entry.first, true), 
+		entry.second/sum);
+	}
+	if(gl.VerboseAll > 0) {G4cout << "### MaterialBot3 created with " << ncomponents << " mass components"  << G4endl;
+		const G4ElementVector* elems = MaterialBot3->GetElementVector();
+		const G4double* fracs = MaterialBot3->GetFractionVector();
+		for (G4int i=0; i<MaterialBot3->GetNumberOfElements(); ++i) {
+    		std::cout << "  " << (*elems)[i]->GetName()
+              << " Z=" << (*elems)[i]->GetZ()
+              << ", fractionMass=" << fracs[i] << "\n";
+			}
+		}
+	}
+////////////////////Bot3 Material Fin
 
 
   G4cout << "### Materials created " << G4endl;

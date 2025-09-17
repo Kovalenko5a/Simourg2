@@ -29,7 +29,8 @@ public:
   G4int MaterialSHLDFormulaN[20]; // Numbers of atoms (by element) in chemical formula of MaterialSHLD
   G4int MaterialSHLDFormulaNum; // Number of atoms of given element in chemical formula of MaterialSHLD
   G4int MaterialSHLDNComponents; // Number of components in chemical formula of MaterialSHLD
-  std::map<G4String, G4double> SHLDNElementSolution;
+  std::map<G4String, G4double> SHLDElementSolution;
+
 
   G4int isCover2Box; // if 0, the Cover2 is cylindric (in this case, there should be XL_Cover2==YL_Cover2)
   G4double D_Cover2; // diameter of the Cover2, mm
