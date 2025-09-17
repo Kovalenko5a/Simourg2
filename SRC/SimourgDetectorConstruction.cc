@@ -25,6 +25,37 @@
 
 extern SimourgGlobal gl;
 
+
+#include "G4GeometryManager.hh"
+#include "G4PhysicalVolumeStore.hh"
+
+void CheckAllOverlaps()
+{
+    auto* store = G4PhysicalVolumeStore::GetInstance();
+    G4int nErrors = 0;
+	G4cout << "Runing overlap check in SimourgDetectorConstruction" << G4endl;
+    for (auto pv : *store) {
+        // Check all daughters of this volume
+        G4bool hasOverlap = pv->CheckOverlaps(100000, 0., true);
+        if (hasOverlap) {
+            G4cerr << "Overlap detected in volume: " 
+                   << pv->GetName() << G4endl;
+            nErrors++;
+        }
+    }
+
+    if (nErrors > 0) {
+		//TODO add the global bool variable defined via messenger
+		// to stop or continue the visualisation if overlaping detected
+		// better to debug using OpenGL
+        if(true) G4Exception("CheckAllOverlaps", "Geom001", FatalException,
+                    "Geometry overlaps detected, aborting run.");
+    } else {
+        G4cout << "No overlaps detected." << G4endl;
+    }
+}
+
+
 SimourgDetectorConstruction::SimourgDetectorConstruction()
 {
   gl.TimeStampDetConstr = "Executing " __FILE__ " (compiled " __DATE__ " " __TIME__ ")";
@@ -1251,6 +1282,12 @@ G4RotationMatrix* rotation = new G4RotationMatrix();
 		G4cout << "### Z_Bot3:" << gl.Z_Bot3;
 		G4cout << "[OK]" << G4endl;
 	} 
+  //------------------------------------------------
+  // Check volumes overlap
+  //------------------------------------------------
+
+
+	CheckAllOverlaps();
 
 
   //------------------------------------------------

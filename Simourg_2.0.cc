@@ -54,6 +54,7 @@ constexpr int SpectrumLengthDet = 5000;
 SimourgGlobal gl;
 
 
+
 int main(int argc, char* argv[])
 { 
   G4cout << "=================== Simourg v1.4 ====================" << G4endl;
@@ -211,8 +212,9 @@ G4cout << "runManager Initialize 1" << G4endl;
     }
   //geometry check overlap
   //TODO exeption for intersection - only OpenGL if intersect
-    UI->ApplyCommand("/geometry/test/resolution 10000000");
-    UI->ApplyCommand("/geometry/test/run");
+    // UI->ApplyCommand("/geometry/test/resolution 10000000");
+    // UI->ApplyCommand("/geometry/test/run");
+
    
   //  // Ensure trajectories are stored & accumulated
   //   UI->ApplyCommand("/tracking/storeTrajectory 1");
