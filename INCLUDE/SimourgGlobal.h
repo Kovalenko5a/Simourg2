@@ -110,7 +110,8 @@ public:
   G4ThreeVector Rot_Top1; // Rotation vector (for rotation matrix) Top1
   // G4int isTop1aDetector;
   std::vector<std::string> DetectorsList; //Detector list for sensative detector creation
-  std::map<std::string, G4double> EdepDetect; // Map to store detector states
+  std::map<std::string, G4double> EdepDetect; // Map to store energy deposition per detector
+  std::map<std::string, std::pair<long double, long double>> TimeDetect; // Map to store time of deposition per detector states
 
   G4double MaterialTop1Density; // Density of the Top1 volume material, g/cm^3
   G4String MaterialTop1ElementNames[20]; // Names of elements in chemical formula of MaterialTop1

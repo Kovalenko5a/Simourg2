@@ -53,6 +53,7 @@ void SimourgSensDet::Initialize(G4HCofThisEvent* HCE)
   G4cout <<  fName << " fName  " << G4endl;
   HitID = -1;
   gl.EdepDetect[fName] =0;
+  gl.TimeDetect[fName] ={0,0};
   
 }
 
@@ -75,6 +76,7 @@ G4bool SimourgSensDet::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
   G4VPhysicalVolume* physVol = theTouchable->GetVolume(); 
 /////////HIT COLLECTION	start
 G4double tHit = aStep->GetPostStepPoint()->GetGlobalTime();
+// G4double tHit = aStep->GetPreStepPoint()->GetGlobalTime();
 	if (tHit < gl.tMinHit) gl.tMinHit = tHit;
 	if (gl.tMaxHit < tHit) gl.tMaxHit = tHit;
 	gl.tHit[gl.numHits] = tHit;
@@ -99,10 +101,14 @@ G4double tHit = aStep->GetPostStepPoint()->GetGlobalTime();
 	if (HitID == -1) gl.tFirstHit = tHit; //0; 
 	G4double globalTime = aStep->GetPostStepPoint()->GetGlobalTime();
 	G4double globalTimeSince1stHit = globalTime - gl.tFirstHit; // in order to start time counting from the first hit
-
-	if(1 /* globalTimeSince1stHit >= gl.tMin && globalTimeSince1stHit <= gl.tMax */)
+		
+				G4cout << " IN " << fName << " At a time " << globalTime << " Edep " << edep << G4endl;
+	if( 
+		1
+	// globalTimeSince1stHit >= gl.tMin && globalTimeSince1stHit <= gl.tMax
+	)
 	{
-
+		G4cout << "### New Detector Hit! At t =" << (globalTime / s) << " s (" << (globalTimeSince1stHit / s) << " s after 1st hit), E = " << edep / MeV << " MeV";
 		if (HitID==-1)
 		{
 			SimourgDetectorHit* DetectorHit = new SimourgDetectorHit();
@@ -131,14 +137,20 @@ G4double tHit = aStep->GetPostStepPoint()->GetGlobalTime();
 		
 
 /////////Save energy deposition globaly
+		G4double kinEnergy = aStep->GetTrack()->GetKineticEnergy();
+		if(aStep->IsFirstStepInVolume()) gl.TimeDetect[fName].first = aStep->GetPreStepPoint()->GetGlobalTime();
+		if(aStep->IsLastStepInVolume() || kinEnergy==0) gl.TimeDetect[fName].second = aStep->GetPostStepPoint()->GetGlobalTime();
+
 		// G4cout << "### numOfEvent = " << numOfEvents << " Edep =" << edep  << " Volume name " << fName << G4endl;
 		if(partCharge <1.5)
 		{
 			EOfHit += edep; // not alpha particle
 			gl.EdepDetect[fName]+=edep;
+			G4cout << " IN " << fName << " At a time " << globalTime << " Edep " << edep << G4endl;
 		} else {
 			EOfHit += edep * gl.AlphaBeta; // alpha particle
 			gl.EdepDetect[fName] +=edep;
+			G4cout << " IN " << fName << " At a time " << globalTime << " Edep " << edep << G4endl;
 		}
 	} else 
 	{

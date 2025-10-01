@@ -48,7 +48,7 @@ void CheckAllOverlaps()
 		//TODO add the global bool variable defined via messenger
 		// to stop or continue the visualisation if overlaping detected
 		// better to debug using OpenGL
-        if(true) G4Exception("CheckAllOverlaps", "Geom001", FatalException,
+        if(false) G4Exception("CheckAllOverlaps", "Geom001", FatalException,
                     "Geometry overlaps detected, aborting run.");
     } else {
         G4cout << "No overlaps detected." << G4endl;

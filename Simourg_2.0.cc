@@ -260,6 +260,8 @@ std::vector<std::string> volumeNames = {
               if (c == ' ' || c == ':') c = '_';
             }
           	G4AnalysisManager *man = G4AnalysisManager::Instance();
+            // man->SetNtupleRowWise(true);          // optional: nicer CSV format
+            man->SetNtuplePrecision(16); 
             // 
             if(gl.saveTo ==0)
             {
@@ -280,6 +282,10 @@ std::vector<std::string> volumeNames = {
     man->CreateNtuple("Det", "DetSD");
             man->CreateNtupleIColumn("RunID");
             man->CreateNtupleDColumn("Edep");
+            man->CreateNtupleDColumn("Tinit");
+            man->CreateNtupleDColumn("Tfin");
+            man->SetNtupleRowWise(true);          // optional: nicer CSV format
+            man->SetNtuplePrecision(16); 
             man->FinishNtuple(0);
 
 for (size_t i = 1; i < gl.DetectorsList.size()+1; i++) {
@@ -287,7 +293,13 @@ for (size_t i = 1; i < gl.DetectorsList.size()+1; i++) {
     man->CreateNtuple(gl.DetectorsList[i-1], gl.DetectorsList[i-1]);
             man->CreateNtupleIColumn("RunID");
             man->CreateNtupleDColumn("Edep");
+            man->CreateNtupleDColumn("Tinit");
+            man->CreateNtupleDColumn("Tfin");
+            man->SetNtupleRowWise(true);          // optional: nicer CSV format
+            man->SetNtuplePrecision(16); 
             man->FinishNtuple(i);
+
+ 
 }
 
 
@@ -303,12 +315,16 @@ if(gl.DoPicture==0 || gl.DoPicture==1){
 //TODO: save all edep from each detector in one file (different columts)
             man->FillNtupleIColumn(0, 0, iRun);
             man->FillNtupleDColumn(0, 1, gl.EdepDetect["Det/DetSD"]);
+            man->FillNtupleDColumn(0, 2, gl.TimeDetect["Det/DetSD"].first);
+            man->FillNtupleDColumn(0, 3, gl.TimeDetect["Det/DetSD"].second);
             man->AddNtupleRow(0);
 
             for (size_t i = 1; i < gl.DetectorsList.size()+1; i++) {
               if(gl.EdepDetect[gl.DetectorsList[i-1]]>0){
             man->FillNtupleIColumn(i, 0, iRun);
             man->FillNtupleDColumn(i, 1, gl.EdepDetect[gl.DetectorsList[i-1]]);
+            man->FillNtupleDColumn(i, 2, gl.TimeDetect[gl.DetectorsList[i-1]].first);
+            man->FillNtupleDColumn(i, 3, gl.TimeDetect[gl.DetectorsList[i-1]].second);
             man->AddNtupleRow(i);}
             }
 

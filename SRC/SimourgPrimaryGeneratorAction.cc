@@ -206,7 +206,8 @@ void SimourgPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       rotRand.set(randPhi,randTheta,randPsi); // random matrix to rotate the event around its vertex
     }
   }
-	G4double tCurr=0.;
+	// G4double tCurr=0.;
+  G4double tCurr=tEvt;
   for(G4int i=0; i < nOfPParticles; i++) // cycle over the particles in the event
   {
     if (gl.isDecay0) 
@@ -318,7 +319,8 @@ void SimourgPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     particleSource->SetParticlePolarization( Polarization ); 
     particleSource->SetParticlePosition(partPos);
   //TODO: add time moment
-    particleSource->SetParticleTime(tPart);
+    particleSource->SetParticleTime(tCurr);
+    // particleSource->SetParticleTime(tPart);
 
     particleSource->GeneratePrimaryVertex(anEvent);
   } // end of cycle over the particles in the event
