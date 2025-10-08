@@ -72,15 +72,17 @@ G4bool SimourgSensDet::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
 
   G4TouchableHistory* theTouchable
     = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
-    
   G4VPhysicalVolume* physVol = theTouchable->GetVolume(); 
 /////////HIT COLLECTION	start
 G4double tHit = aStep->GetPostStepPoint()->GetGlobalTime();
+G4cout << " Volume " << fName << " At a time " << tHit << " Edep " << edep << " HITid " << HitID << G4endl;
 // G4double tHit = aStep->GetPreStepPoint()->GetGlobalTime();
 	if (tHit < gl.tMinHit) gl.tMinHit = tHit;
 	if (gl.tMaxHit < tHit) gl.tMaxHit = tHit;
 	gl.tHit[gl.numHits] = tHit;
 	gl.eHit[gl.numHits] = (partCharge <= 1) ? edep : edep*gl.AlphaBeta;
+	gl.TimeDetect[fName].first.push_back(tHit);
+	gl.TimeDetect[fName].second.push_back((partCharge <= 1) ? edep : edep*gl.AlphaBeta);
 	gl.numHits++;
 	if (gl.numHits >= LENGTH_HIT_ARR) // to compress arrays if they are overfilled
 	{
@@ -98,17 +100,17 @@ G4double tHit = aStep->GetPostStepPoint()->GetGlobalTime();
 			G4cout << "### Array of hits for this event is compressed to " << gl.numHits << " points" << G4endl;
 		}
 	}
-	if (HitID == -1) gl.tFirstHit = tHit; //0; 
+	if (HitID == -1) gl.tFirstHit = tHit; //Should be one that closest to 0 bun in reality thay go unordered; 
 	G4double globalTime = aStep->GetPostStepPoint()->GetGlobalTime();
 	G4double globalTimeSince1stHit = globalTime - gl.tFirstHit; // in order to start time counting from the first hit
-		
-				G4cout << " IN " << fName << " At a time " << globalTime << " Edep " << edep << G4endl;
+		//BUT the first hit isn't the first hit -> negative time
+				// G4cout << " IN " << fName << " At a time " << globalTime << " Edep " << edep << G4endl;
 	if( 
-		1
+		false
 	// globalTimeSince1stHit >= gl.tMin && globalTimeSince1stHit <= gl.tMax
 	)
 	{
-		G4cout << "### New Detector Hit! At t =" << (globalTime / s) << " s (" << (globalTimeSince1stHit / s) << " s after 1st hit), E = " << edep / MeV << " MeV";
+		// G4cout << "### New Detector Hit! At t =" << (globalTime / s) << " s (" << (globalTimeSince1stHit / s) << " s after 1st hit), E = " << edep / MeV << " MeV";
 		if (HitID==-1)
 		{
 			SimourgDetectorHit* DetectorHit = new SimourgDetectorHit();
@@ -116,7 +118,7 @@ G4double tHit = aStep->GetPostStepPoint()->GetGlobalTime();
 			HitID = DetCollection->insert(DetectorHit) - 1;
 			if (verboseLevel > 0 || gl.VerboseAll > 0)
 			{
-				G4cout << "### New Detector Hit! At t =" << (globalTime / s) << " s (" << (globalTimeSince1stHit / s) << " s after 1st hit), E = " << edep / MeV << " MeV";
+				// G4cout << "### New Detector Hit! At t =" << (globalTime / s) << " s (" << (globalTimeSince1stHit / s) << " s after 1st hit), E = " << edep / MeV << " MeV";
 				if (partCharge > 1) G4cout << ", Eobs = " << gl.AlphaBeta * edep / MeV << " MeV (alpha)";
 				G4cout << G4endl;
 			}
@@ -138,19 +140,19 @@ G4double tHit = aStep->GetPostStepPoint()->GetGlobalTime();
 
 /////////Save energy deposition globaly
 		G4double kinEnergy = aStep->GetTrack()->GetKineticEnergy();
-		if(aStep->IsFirstStepInVolume()) gl.TimeDetect[fName].first = aStep->GetPreStepPoint()->GetGlobalTime();
-		if(aStep->IsLastStepInVolume() || kinEnergy==0) gl.TimeDetect[fName].second = aStep->GetPostStepPoint()->GetGlobalTime();
+		// if(aStep->IsFirstStepInVolume()) gl.TimeDetect[fName].first = aStep->GetPreStepPoint()->GetGlobalTime();
+		// if(aStep->IsLastStepInVolume() || kinEnergy==0) gl.TimeDetect[fName].second = aStep->GetPostStepPoint()->GetGlobalTime();
 
 		// G4cout << "### numOfEvent = " << numOfEvents << " Edep =" << edep  << " Volume name " << fName << G4endl;
 		if(partCharge <1.5)
 		{
 			EOfHit += edep; // not alpha particle
 			gl.EdepDetect[fName]+=edep;
-			G4cout << " IN " << fName << " At a time " << globalTime << " Edep " << edep << G4endl;
+			// G4cout << " IN " << fName << " At a time " << globalTime << " Edep " << edep << G4endl;
 		} else {
 			EOfHit += edep * gl.AlphaBeta; // alpha particle
 			gl.EdepDetect[fName] +=edep;
-			G4cout << " IN " << fName << " At a time " << globalTime << " Edep " << edep << G4endl;
+			// G4cout << " IN " << fName << " At a time " << globalTime << " Edep " << edep << G4endl;
 		}
 	} else 
 	{
@@ -168,7 +170,7 @@ G4double tHit = aStep->GetPostStepPoint()->GetGlobalTime();
 
 void SimourgSensDet::EndOfEvent(G4HCofThisEvent* HCE)
 {
-/////////HIT COLLECTION CONTINUE	(not needed?)
+/////////HIT COLLECTION CONTINUE
   static G4int HCID = -1;
   if(HCID<0)
   { HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]); }

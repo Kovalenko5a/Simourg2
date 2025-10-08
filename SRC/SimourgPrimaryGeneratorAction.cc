@@ -207,7 +207,7 @@ void SimourgPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     }
   }
 	// G4double tCurr=0.;
-  G4double tCurr=tEvt;
+  G4double tCurr=tPart;
   for(G4int i=0; i < nOfPParticles; i++) // cycle over the particles in the event
   {
     if (gl.isDecay0) 
@@ -283,7 +283,7 @@ void SimourgPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       ParticleName = "alpha";
       Polarization = G4ThreeVector(0,0,0); // For alphas -- 
 //                                            // polarisation is ZERO
-
+//TODO: add all particles
 		} else if(iPartType >= 1000) // nuclide atom, iPartType = A*1000 + Z
 		{
 			Z = iPartType % 1000;

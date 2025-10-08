@@ -1,0 +1,186 @@
+# mac file for Simourg_2.0
+
+/user/init
+/user/showAll
+
+# Parameters of the passive shield
+
+/user/D_SHLD 200.00 mm
+/user/ZL_SHLD 200.00 mm  
+/user/isSHLDaDetector 1
+/user/MaterialSHLDDensity 8.96 g/cm3
+/user/MaterialSHLDElementName Cu
+/user/MaterialSHLDFormulaNum 1
+
+# Parameters of the Cover2 volume (alias: Marinelli; contains Cover1; omittable)
+
+#/user/D_Cover2 60.00 mm
+/user/XL_Cover2 56.00 mm
+/user/YL_Cover2 56.00 mm
+/user/ZL_Cover2 56.00 mm
+/user/Z_Cover2 0.00 mm
+/user/isCover2aDetector 1
+/user/MaterialCover2Density 1.1 g/cm3
+/user/MaterialCover2ElementName C
+/user/MaterialCover2FormulaNum 1
+/user/MaterialCover2ElementName H
+/user/MaterialCover2FormulaNum 2
+
+
+# Parameters of the Cover1 volume  (alias: Core; contains Det; omittable)
+
+#/user/D_Cover1 55.00 mm
+/user/XL_Cover1 55.00 mm
+/user/YL_Cover1 55.00 mm
+/user/ZL_Cover1 55.00 mm
+/user/Z_Cover1 0.00 mm
+/user/isCover1aDetector 1
+/user/MaterialCover1Density 1.1 g/cm3
+/user/MaterialCover1ElementName C
+/user/MaterialCover1FormulaNum 1
+/user/MaterialCover1ElementName H
+/user/MaterialCover1FormulaNum 2
+
+
+# Parameters of the Detector volume (Det; contains Cavity; not omittable)
+
+#/user/D_Det 50.00 mm
+/user/XL_Det 50.00 mm
+/user/YL_Det 50.00 mm
+/user/ZL_Det 50.00 mm
+/user/Z_Det 0.00 mm
+/user/MaterialDetDensity 8.0 g/cm3
+/user/MaterialDetElementName Cd
+/user/MaterialDetFormulaNum 1
+/user/MaterialDetElementName W
+/user/MaterialDetFormulaNum 1
+/user/MaterialDetElementName O
+/user/MaterialDetFormulaNum 4
+
+# Parameters of the Cavity volume (omittable)
+
+/user/D_Cavity 5.00 mm
+#/user/XL_Cavity 5.00 mm
+#/user/YL_Cavity 5.00 mm
+/user/ZL_Cavity 5.00 mm
+/user/Z_Cavity 0.00 mm
+/user/isCavityaDetector 1
+/user/MaterialCavityDensity 8.0 g/cm3
+/user/MaterialCavityElementName Cd
+/user/MaterialCavityFormulaNum 1
+/user/MaterialCavityElementName W
+/user/MaterialCavityFormulaNum 1
+/user/MaterialCavityElementName O
+/user/MaterialCavityFormulaNum 4
+
+# Parameters of the additional volumes (Top1-Top3, Bot1-Bot3)
+
+/user/D_Top1 40.00 mm
+/user/d_Top1 39.99 mm
+/user/ZL_Top1 1.00 mm
+/user/Z_Top1 68.00 mm
+/user/Y_Top1 8.00 mm
+/user/X_Top1 8.00 mm
+/user/Rot_Top1 30 80 30
+/user/isTop1aDetector 1
+/user/MaterialTop1Density 10 g/cm3
+/user/MaterialTop1Weight Cu 100 F 10 Cs 123.2
+
+/user/D_Top2 50.00 mm
+/user/d_Top2 30.00 mm
+/user/ZL_Top2 1.00 mm
+/user/Z_Top2 34.00 mm
+/user/isTop2aDetector 1
+/user/MaterialTop2Density 10 g/cm3
+/user/MaterialTop2ElementName Cu
+/user/MaterialTop2FormulaNum 1
+
+/user/D_Top3 40.00 mm
+/user/d_Top3 20.00 mm
+/user/ZL_Top3 1.00 mm
+/user/Z_Top3 36.00 mm
+/user/isTop3aDetector 1
+/user/MaterialTop3Density 10 g/cm3
+/user/MaterialTop3ElementName Cu
+/user/MaterialTop3FormulaNum 1
+
+/user/D_Bot1 100.00 mm
+/user/d_Bot1 97.00 mm
+/user/ZL_Bot1 75.00 mm
+/user/Z_Bot1 0.00 mm
+/user/Y_Bot1 0.00 mm
+/user/X_Bot1 0.00 mm
+/user/isBot1aDetector 1
+/user/MaterialBot1Density 10 g/cm3
+/user/MaterialBot1ElementName Cu
+/user/MaterialBot1FormulaNum 1
+
+/user/D_Bot2 50.00 mm
+/user/d_Bot2 40.00 mm
+/user/ZL_Bot2 1.00 mm
+/user/Y_Bot2 0.00 mm
+/user/X_Bot2 -36 mm
+/user/Rot_Bot2 0 90 0
+/user/Z_Bot2 0 mm
+/user/isBot2aDetector 1
+/user/MaterialBot2Density 10 g/cm3
+/user/MaterialBot2ElementName Cu
+/user/MaterialBot2FormulaNum 1
+
+/user/D_Bot3 40.00 mm
+/user/d_Bot3 39.00 mm
+/user/ZL_Bot3 1 mm
+/user/Z_Bot3 0 mm
+/user/Y_Bot3 0.00 mm
+/user/X_Bot3 36 mm
+/user/Rot_Bot3 0 90 0
+/user/isBot3aDetector 1
+/user/MaterialBot3Density 10 g/cm3
+/user/MaterialBot3Weight Cu 100 F 10 Cs 123.2
+
+# Parameters of the Source quasivolume
+
+#/user/VolumeSrc Det
+#/user/D_Src 1.00 mm
+/user/XL_Src 1.00 mm
+/user/YL_Src 1.00 mm
+/user/ZL_Src 1.00 mm
+/user/X_Src 0.00 mm
+/user/Y_Src 0.00 mm
+/user/Z_Src 35.00 mm
+
+# Parameters of the UnSource quasivolume (is subtracted from the Source quasivolume)
+
+#/user/VolumeUnSrc Det
+/user/D_UnSrc 1.00 mm
+#/user/XL_UnSrc 1.00 mm
+#/user/YL_UnSrc 1.00 mm
+/user/ZL_UnSrc 1.00 mm
+/user/X_UnSrc 1.00 mm
+/user/Y_UnSrc 0.00 mm
+/user/Z_UnSrc 35.00 mm
+
+/user/Decay0File C:/Users/111/Documents/Simourg/Simourg_1.4/Tl208.dat
+
+/user/Threshold 1.0 keV
+/user/FWHM1 0.0
+/user/FWHM2 1.0
+/user/ELowLimit 1.0 keV 
+/user/DELowLimit 1000.0 nm
+/user/DGLowLimit 1000.0 nm
+/user/ChannelWidth 10 keV
+/user/numberOfRuns 10000
+/user/Step 100
+/user/RandomSeed 90115037
+/user/WaitCommand 0
+/user/VerboseVis 0
+/user/VerboseAll 0
+/user/DoPicture 0
+/user/tMin 0.0 s
+/user/tMax 300000 s
+/user/AllowIsotropicRotation 1
+/user/saveTo 0
+/user/wrlFilesQuantity 100
+
+
+/user/showAll

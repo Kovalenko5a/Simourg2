@@ -35,6 +35,12 @@
 #include <chrono>
 #include <ctime>
 #include <fstream>
+#include <numeric>
+#include <map>
+#include <vector>
+#include <string>
+#include <numeric>  // for std::accumulate
+#include <iostream>
 
 #include "SimourgDetectorConstruction.h"
 //#include "SimourgPhysicsList.h"
@@ -261,7 +267,6 @@ std::vector<std::string> volumeNames = {
             }
           	G4AnalysisManager *man = G4AnalysisManager::Instance();
             // man->SetNtupleRowWise(true);          // optional: nicer CSV format
-            man->SetNtuplePrecision(16); 
             // 
             if(gl.saveTo ==0)
             {
@@ -282,10 +287,9 @@ std::vector<std::string> volumeNames = {
     man->CreateNtuple("Det", "DetSD");
             man->CreateNtupleIColumn("RunID");
             man->CreateNtupleDColumn("Edep");
-            man->CreateNtupleDColumn("Tinit");
-            man->CreateNtupleDColumn("Tfin");
+            // man->CreateNtupleDColumn("Tinit");
+            // man->CreateNtupleDColumn("Tfin");
             man->SetNtupleRowWise(true);          // optional: nicer CSV format
-            man->SetNtuplePrecision(16); 
             man->FinishNtuple(0);
 
 for (size_t i = 1; i < gl.DetectorsList.size()+1; i++) {
@@ -293,10 +297,9 @@ for (size_t i = 1; i < gl.DetectorsList.size()+1; i++) {
     man->CreateNtuple(gl.DetectorsList[i-1], gl.DetectorsList[i-1]);
             man->CreateNtupleIColumn("RunID");
             man->CreateNtupleDColumn("Edep");
-            man->CreateNtupleDColumn("Tinit");
-            man->CreateNtupleDColumn("Tfin");
+            // man->CreateNtupleDColumn("Tinit");
+            // man->CreateNtupleDColumn("Tfin");
             man->SetNtupleRowWise(true);          // optional: nicer CSV format
-            man->SetNtuplePrecision(16); 
             man->FinishNtuple(i);
 
  
@@ -310,21 +313,63 @@ if(gl.DoPicture==0 || gl.DoPicture==1){
           runManager->SetNumberOfEventsToBeStored(0);
           SimourgSensDet::numOfEvents = 0;
           runManager->BeamOn(1);
+#include <algorithm>
+#include <numeric>
 
+long double sumEdep = 0.0L;
+          
+          auto it = gl.TimeDetect.find("Det/DetSD");
+          if (it != gl.TimeDetect.end()) {
+              const auto &times = it->second.first;
+              const auto &edeps = it->second.second;
+              long double e = 0;
+              if (!times.empty() && times.size() == edeps.size()) {
+                  long double tMinAbs = *std::min_element(times.begin(), times.end());
+                  sumEdep = std::transform_reduce(
+                      times.begin(), times.end(), edeps.begin(), 0.0L,
+                      std::plus<>(), [&](long double t, long double e) {
+                          long double dt = t - tMinAbs;
+                          return (dt >= gl.tMin && dt <= gl.tMax) ? e : 0.0L;
+                      });
+                      G4cout << " edep " << sumEdep << " minimum Time "<< tMinAbs << G4endl;
+              }
+              gl.EdepDetect["Det/DetSD"] = sumEdep;
+          }
           G4double E = gl.EdepDetect["Det/DetSD"];
 //TODO: save all edep from each detector in one file (different columts)
             man->FillNtupleIColumn(0, 0, iRun);
             man->FillNtupleDColumn(0, 1, gl.EdepDetect["Det/DetSD"]);
-            man->FillNtupleDColumn(0, 2, gl.TimeDetect["Det/DetSD"].first);
-            man->FillNtupleDColumn(0, 3, gl.TimeDetect["Det/DetSD"].second);
+            // man->FillNtupleDColumn(0, 2, gl.TimeDetect["Det/DetSD"].first);
+            // man->FillNtupleDColumn(0, 3, gl.TimeDetect["Det/DetSD"].second);
             man->AddNtupleRow(0);
 
             for (size_t i = 1; i < gl.DetectorsList.size()+1; i++) {
+          sumEdep = 0.0L;
+          auto it = gl.TimeDetect.find(gl.DetectorsList[i-1]);
+          if (it != gl.TimeDetect.end()) {
+            long double e = 0;
+              const auto &times = it->second.first;
+              const auto &edeps = it->second.second;
+              
+              if (!times.empty() && times.size() == edeps.size()) {
+                  long double tMinAbs = *std::min_element(times.begin(), times.end());
+                  sumEdep = std::transform_reduce(
+                      times.begin(), times.end(), edeps.begin(), 0.0L,
+                      std::plus<>(), [&](long double t, long double e) {
+                          long double dt = t - tMinAbs;
+                          return (dt >= gl.tMin && dt <= gl.tMax) ? e : 0.0L;
+                      });
+                      G4cout << " edep " << sumEdep << " minimum Time "<< tMinAbs << G4endl;
+                      G4cout << " minT " << gl.tMin << " maxT "<< gl.tMax << G4endl;
+                       
+              }
+              gl.EdepDetect[gl.DetectorsList[i-1]] = sumEdep;
+          }
               if(gl.EdepDetect[gl.DetectorsList[i-1]]>0){
             man->FillNtupleIColumn(i, 0, iRun);
             man->FillNtupleDColumn(i, 1, gl.EdepDetect[gl.DetectorsList[i-1]]);
-            man->FillNtupleDColumn(i, 2, gl.TimeDetect[gl.DetectorsList[i-1]].first);
-            man->FillNtupleDColumn(i, 3, gl.TimeDetect[gl.DetectorsList[i-1]].second);
+            // man->FillNtupleDColumn(i, 2, gl.TimeDetect[gl.DetectorsList[i-1]].first);
+            // man->FillNtupleDColumn(i, 3, gl.TimeDetect[gl.DetectorsList[i-1]].second);
             man->AddNtupleRow(i);}
             }
 

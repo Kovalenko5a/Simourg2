@@ -2916,9 +2916,9 @@ void SimourgMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if( command == SaveToCmd )
     gl.saveTo=SaveToCmd->GetNewIntValue(newValue);
   if( command == tMinCmd )
-    gl.tMin=tMinCmd->GetNewDoubleValue(newValue);
+    gl.tMin=tMinCmd->GetNewDoubleValue(newValue)/1e9;
   if( command == tMaxCmd )
-    gl.tMax=tMaxCmd->GetNewDoubleValue(newValue);
+    gl.tMax=tMaxCmd->GetNewDoubleValue(newValue)/1e9;
   if( command == ELowLimitCmd )
     gl.ELowLimit=ELowLimitCmd->GetNewDoubleValue(newValue);
   if( command == DELowLimitCmd )
