@@ -56,9 +56,9 @@
 
 # Parameters of the Cavity volume (omittable)
 
-#/user/D_Cavity 5.00 mm
-/user/XL_Cavity 5.00 mm
-/user/YL_Cavity 5.00 mm
+/user/D_Cavity 5.00 mm
+#/user/XL_Cavity 5.00 mm
+#/user/YL_Cavity 5.00 mm
 /user/ZL_Cavity 5.00 mm
 /user/Z_Cavity 0.00 mm
 /user/MaterialCavityDensity 8.0 g/cm3

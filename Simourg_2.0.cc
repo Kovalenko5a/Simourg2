@@ -198,9 +198,9 @@ G4cout << "runManager Initialize 1" << G4endl;
       #ifdef _WIN32
           std::cout << "Running on Windows" << std::endl;
         _putenv(vrmlFiles);
-      #else
-        std::cout << "Running on Linux/macOS" << std::endl;
-        setenv("G4VRMLFILE_MAX_FILE_NUM", std::to_string(gl.wrlFilesQuantity), 1);  // Linux/macOS
+      // #else
+      //   std::cout << "Running on Linux/macOS" << std::endl;
+      //   setenv("G4VRMLFILE_MAX_FILE_NUM", std::to_string(gl.wrlFilesQuantity), 1);  // Linux/macOS
       #endif
     //   G4cout << "DoPicture corresponds to "<< gl.DoPicture << G4endl;
       UI->ApplyCommand("/vis/open VRML2FILE");
@@ -248,11 +248,11 @@ G4cout << "runManager Initialize 1" << G4endl;
 std::cout << "  MARKER DO PICTURE " << gl.DoPicture << std::endl;
 // std::cout << "  MARKER Top1 - is detector " << gl.isTop1aDetector << std::endl;
 
-std::vector<std::string> volumeNames = {
-        "SHLD", "Det", "Src", "UnSrc", "Cover1", 
-        "Cover2", "Cavity", "Top1", "Top2", "Top3",
-        "Bot1", "Bot2", "Bot3" // Add more as needed
-    };
+// std::vector<std::string> volumeNames = {
+//         "SHLD", "Det", "Src", "UnSrc", "Cover1", 
+//         "Cover2", "Cavity", "Top1", "Top2", "Top3",
+//         "Bot1", "Bot2", "Bot3" // Add more as needed
+//     };
 
             auto now = std::chrono::system_clock::now();
             std::time_t now_time = std::chrono::system_clock::to_time_t(now);
@@ -312,6 +312,7 @@ if(gl.DoPicture==0 || gl.DoPicture==1){
         {
           runManager->SetNumberOfEventsToBeStored(0);
           SimourgSensDet::numOfEvents = 0;
+          G4cout << "DBG INFO BEFORE BEAMON" << gl.DetectorsList.size() << G4endl;
           runManager->BeamOn(1);
 #include <algorithm>
 #include <numeric>

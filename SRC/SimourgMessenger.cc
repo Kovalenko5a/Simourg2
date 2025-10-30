@@ -2557,8 +2557,8 @@ void SimourgMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
   if( command == D_Bot3Cmd || command == ZL_Bot3Cmd || command == Z_Bot3Cmd ||
       command == MaterialBot3DensityCmd || command == MaterialBot3ElementNameCmd ||
-      command == MaterialBot3FormulaNumCmd ) gl.isBot3=true;
-  if( command == Detector_Bot3Cmd && Detector_Bot3Cmd->GetNewIntValue(newValue)==1)
+      command == MaterialBot3FormulaNumCmd ) gl.isBot3=true; 
+  if( gl.isBot3==true && Detector_Bot3Cmd->GetNewIntValue(newValue)==1)
       gl.DetectorsList.push_back("Bot3");//
 
   if( command == D_SrcCmd )

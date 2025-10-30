@@ -53,7 +53,7 @@ void SimourgSensDet::Initialize(G4HCofThisEvent* HCE)
   G4cout <<  fName << " fName  " << G4endl;
   HitID = -1;
   gl.EdepDetect[fName] =0;
-  gl.TimeDetect[fName] ={0,0};
+  gl.TimeDetect[fName] ={{0},{0}};
   
 }
 

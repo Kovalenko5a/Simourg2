@@ -44,11 +44,11 @@ SimourgGlobal::SimourgGlobal()
   saveTo = 0;
   wrlFilesQuantity=10;
   // isDetectorMap["Det"]=0;
-  std::vector<std::string> volumeNames = {
-        "SHLD", "Det", "Src", "UnSrc", "Cover1", 
-        "Cover2", "Cavity", "Top1", "Top2", "Top3",
-        "Bot1", "Bot2", "Bot3"
-  };
+  // std::vector<std::string> volumeNames = {
+  //       "SHLD", "Det", "Src", "UnSrc", "Cover1", 
+  //       "Cover2", "Cavity", "Top1", "Top2", "Top3",
+  //       "Bot1", "Bot2", "Bot3"
+  // };
   
 
   // for (const auto& volume : volumeNames) {
