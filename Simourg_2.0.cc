@@ -198,10 +198,12 @@ G4cout << "runManager Initialize 1" << G4endl;
       #ifdef _WIN32
           std::cout << "Running on Windows" << std::endl;
         _putenv(vrmlFiles);
-      // #else
-      //   std::cout << "Running on Linux/macOS" << std::endl;
-      //   setenv("G4VRMLFILE_MAX_FILE_NUM", std::to_string(gl.wrlFilesQuantity), 1);  // Linux/macOS
+      #else
+          std::string str = std::to_string(gl.wrlFilesQuantity);
+          const char* cstr = str.c_str();
+          setenv("G4VRMLFILE_MAX_FILE_NUM", cstr, 1);
       #endif
+
     //   G4cout << "DoPicture corresponds to "<< gl.DoPicture << G4endl;
       UI->ApplyCommand("/vis/open VRML2FILE");
       UI->ApplyCommand("/vis/sceneHandler/create");
