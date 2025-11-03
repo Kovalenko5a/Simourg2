@@ -1413,11 +1413,11 @@ SimourgMessenger::SimourgMessenger(SimourgGlobal* gl1)
 //======================================
   //=======Shield:============
   SaveToCmd = new G4UIcmdWithAnInteger("/user/saveTo",this);  
-  SaveToCmd->SetGuidance("\tSave to ROOT (0) or CSV (1)?");
+  SaveToCmd->SetGuidance("\tSave to ROOT ntuple (0), CSV ntuple (1), CSV columns (2)?");
   SaveToCmd->SetDefaultValue (0);
   // Detector_SHLDCmd->SetUnitCategory("Boolean");
   SaveToCmd->SetParameterName("saveTo",omittable=false);
-  SaveToCmd->SetRange("saveTo==0 || saveTo==1"); 
+  SaveToCmd->SetRange("saveTo==0 || saveTo==1 || saveTo==2"); 
   SaveToCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   //=======Shield:============
   wrlFilesQuantityCmd = new G4UIcmdWithAnInteger("/user/wrlFilesQuantity",this);  
@@ -2558,7 +2558,7 @@ void SimourgMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if( command == D_Bot3Cmd || command == ZL_Bot3Cmd || command == Z_Bot3Cmd ||
       command == MaterialBot3DensityCmd || command == MaterialBot3ElementNameCmd ||
       command == MaterialBot3FormulaNumCmd ) gl.isBot3=true; 
-  if( gl.isBot3==true && Detector_Bot3Cmd->GetNewIntValue(newValue)==1)
+  if( command == Detector_Bot3Cmd && Detector_Bot3Cmd->GetNewIntValue(newValue)==1)
       gl.DetectorsList.push_back("Bot3");//
 
   if( command == D_SrcCmd )

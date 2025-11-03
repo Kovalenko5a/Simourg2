@@ -31,8 +31,8 @@ SimourgSensDet::SimourgSensDet(G4String name,
 :G4VSensitiveDetector(name),Detector(det)
 {
   gl.TimeStampSensDet = "Executing " __FILE__ " (compiled " __DATE__ " " __TIME__ ")";
-
-  collectionName.insert("DetCollection");
+  G4String uniqueName = "DetCollection_" + name;
+  collectionName.insert(uniqueName);
   G4int HitID;
   fName = name;
   
@@ -49,8 +49,9 @@ SimourgSensDet::~SimourgSensDet()
 void SimourgSensDet::Initialize(G4HCofThisEvent* HCE)
 {
   DetCollection = new SimourgDetectorHitsCollection(SensitiveDetectorName,collectionName[0]);
-  G4cout <<  SensitiveDetectorName << " SensitiveDetectorName  " << G4endl;
-  G4cout <<  fName << " fName  " << G4endl;
+//   auto DetCollection = new SimourgDetectorHitsCollection(SensitiveDetectorName,"DetCOL");
+//   G4cout <<  SensitiveDetectorName << " SensitiveDetectorName  " << G4endl;
+//   G4cout <<  fName << " fName  " << G4endl;
   HitID = -1;
   gl.EdepDetect[fName] =0;
   gl.TimeDetect[fName] ={{0},{0}};
@@ -62,29 +63,47 @@ void SimourgSensDet::Initialize(G4HCofThisEvent* HCE)
 G4bool SimourgSensDet::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
-//   G4cout << " Volume name " << fName  << " Edep " << edep << G4endl;
+//   G4cout << " Volume name " << fName  << " Edep" << edep << G4endl;
   G4double stepl = 0.;
-	G4double partCharge = aStep->GetTrack()->GetDefinition()->GetPDGCharge();
+  G4double partCharge = aStep->GetTrack()->GetDefinition()->GetPDGCharge();
   if (partCharge != 0.)
       stepl = aStep->GetStepLength();
       
   if ((edep==0.)&&(stepl==0.)) return false;      
+
+	// G4cout << "### numOfEvent = "  << " Edep =" << edep  << " Volume name " << fName << G4endl;
+	if(partCharge <1.5)
+	{
+		EOfHit += edep; // not alpha particle
+		gl.EdepDetect[fName]+=edep;
+		// G4cout << " IN " << fName << " Edep " << edep << G4endl;
+	} else {
+		EOfHit += edep * gl.AlphaBeta; // alpha particle
+		gl.EdepDetect[fName] +=edep;
+		// G4cout << " IN " << fName << " At a time " << globalTime << " Edep " << edep << G4endl;
+	}
+
+
+
 
   G4TouchableHistory* theTouchable
     = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
   G4VPhysicalVolume* physVol = theTouchable->GetVolume(); 
 /////////HIT COLLECTION	start
 G4double tHit = aStep->GetPostStepPoint()->GetGlobalTime();
-G4cout << " Volume " << fName << " At a time " << tHit << " Edep " << edep << " HITid " << HitID << G4endl;
+// If user had set tmin and tmax than perform this procedure, either it only will lower efficiency
+	if (gl.tMax!=1.e50*s){ 
+	gl.TimeDetect[fName].first.push_back(tHit);
+	gl.TimeDetect[fName].second.push_back((partCharge <= 1) ? edep : edep*gl.AlphaBeta);
+	}
+////////////
+
+// G4cout << " Volume " << fName << " At a time " << tHit << " Edep " << edep << " HITid " << HitID << G4endl;
 // G4double tHit = aStep->GetPreStepPoint()->GetGlobalTime();
 	if (tHit < gl.tMinHit) gl.tMinHit = tHit;
 	if (gl.tMaxHit < tHit) gl.tMaxHit = tHit;
 	gl.tHit[gl.numHits] = tHit;
 	gl.eHit[gl.numHits] = (partCharge <= 1) ? edep : edep*gl.AlphaBeta;
-	if (gl.tMax>0){ // If user had set tmin and tmax than perform this procedure, either it only will lower efficiency
-	gl.TimeDetect[fName].first.push_back(tHit);
-	gl.TimeDetect[fName].second.push_back((partCharge <= 1) ? edep : edep*gl.AlphaBeta);
-	}
 	gl.numHits++;
 	if (gl.numHits >= LENGTH_HIT_ARR) // to compress arrays if they are overfilled
 	{
@@ -134,6 +153,7 @@ G4cout << " Volume " << fName << " At a time " << tHit << " Edep " << edep << " 
 				G4cout << G4endl;
 			}
 		}
+	}
 
 /////////HIT COLLECTION end
 
@@ -141,30 +161,16 @@ G4cout << " Volume " << fName << " At a time " << tHit << " Edep " << edep << " 
 		
 
 /////////Save energy deposition globaly
-		G4double kinEnergy = aStep->GetTrack()->GetKineticEnergy();
+		// G4double kinEnergy = aStep->GetTrack()->GetKineticEnergy();
 		// if(aStep->IsFirstStepInVolume()) gl.TimeDetect[fName].first = aStep->GetPreStepPoint()->GetGlobalTime();
 		// if(aStep->IsLastStepInVolume() || kinEnergy==0) gl.TimeDetect[fName].second = aStep->GetPostStepPoint()->GetGlobalTime();
-
-		// G4cout << "### numOfEvent = " << numOfEvents << " Edep =" << edep  << " Volume name " << fName << G4endl;
-		if(partCharge <1.5)
-		{
-			EOfHit += edep; // not alpha particle
-			gl.EdepDetect[fName]+=edep;
-			// G4cout << " IN " << fName << " At a time " << globalTime << " Edep " << edep << G4endl;
-		} else {
-			EOfHit += edep * gl.AlphaBeta; // alpha particle
-			gl.EdepDetect[fName] +=edep;
-			// G4cout << " IN " << fName << " At a time " << globalTime << " Edep " << edep << G4endl;
-		}
-	} else 
+	if (verboseLevel > 0 || gl.VerboseAll > 0)
 	{
-		if (verboseLevel > 0 || gl.VerboseAll > 0)
-		{
-			G4cout << "### Energy released in Detector is out of time! At t =" << globalTimeSince1stHit / s << " s, E = " << edep / MeV << " MeV";
-			if (partCharge > 1.5) G4cout << ", Eobs = " << gl.AlphaBeta * edep / MeV << " MeV (alpha)";
-			G4cout << G4endl;
-		}
+		G4cout << "### Energy released in Detector is out of time! At t =" << globalTimeSince1stHit / s << " s, E = " << edep / MeV << " MeV";
+		if (partCharge > 1.5) G4cout << ", Eobs = " << gl.AlphaBeta * edep / MeV << " MeV (alpha)";
+		G4cout << G4endl;
 	}
+
   return true;
 }
 

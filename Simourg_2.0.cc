@@ -307,14 +307,24 @@ for (size_t i = 1; i < gl.DetectorsList.size()+1; i++) {
  
 }
 
-
-
+if(gl.saveTo ==2)
+{
+G4cout << "TXT OUTPUT DATAFILE HEADERS"  << G4endl;
+G4cout << "Det/DetSD" << "\t";
+for (size_t i = 1; i < gl.DetectorsList.size()+1; i++)  {G4cout << gl.DetectorsList[i-1] << "\t";}
+G4cout << G4endl;
+}
+std::ofstream fout("output.txt");
+if (!fout.is_open()) {
+    std::cerr << "Error: could not open file for writing!" << std::endl;
+    return 1;
+}
 if(gl.DoPicture==0 || gl.DoPicture==1){
         for(G4int iRun=0;iRun<gl.numberOfRuns;iRun++)
         {
           runManager->SetNumberOfEventsToBeStored(0);
           SimourgSensDet::numOfEvents = 0;
-          G4cout << "DBG INFO BEFORE BEAMON" << gl.DetectorsList.size() << G4endl;
+          // G4cout << "DBG INFO BEFORE BEAMON" << gl.DetectorsList.size() << G4endl;
           runManager->BeamOn(1);
 #include <algorithm>
 #include <numeric>
@@ -322,7 +332,7 @@ if(gl.DoPicture==0 || gl.DoPicture==1){
 long double sumEdep = 0.0L;
           
           auto it = gl.TimeDetect.find("Det/DetSD");
-          if (it != gl.TimeDetect.end() && gl.tMax>0) {
+          if (it != gl.TimeDetect.end() && gl.tMax!=1.e50*s) {
               const auto &times = it->second.first;
               const auto &edeps = it->second.second;
               long double e = 0;
@@ -334,22 +344,27 @@ long double sumEdep = 0.0L;
                           long double dt = t - tMinAbs;
                           return (dt >= gl.tMin && dt <= gl.tMax) ? e : 0.0L;
                       });
-                      G4cout << " edep " << sumEdep << " minimum Time "<< tMinAbs << G4endl;
+                      // G4cout << " edep " << sumEdep << " minimum Time "<< tMinAbs << G4endl;
               }
+              // G4cout << " EDEP ORIGINAL " << gl.EdepDetect["Det/DetSD"]  << G4endl;
               gl.EdepDetect["Det/DetSD"] = sumEdep;
           }
+          // G4cout << " EDEP ORIGINAL " << gl.EdepDetect["Det/DetSD"]  << G4endl;
           G4double E = gl.EdepDetect["Det/DetSD"];
 //TODO: save all edep from each detector in one file (different columts)
+            if(gl.saveTo<2){
             man->FillNtupleIColumn(0, 0, iRun);
             man->FillNtupleDColumn(0, 1, gl.EdepDetect["Det/DetSD"]);
             // man->FillNtupleDColumn(0, 2, gl.TimeDetect["Det/DetSD"].first);
             // man->FillNtupleDColumn(0, 3, gl.TimeDetect["Det/DetSD"].second);
             man->AddNtupleRow(0);
+            }
+            else {fout << iRun << "\t" << gl.EdepDetect["Det/DetSD"];}
 
-            for (size_t i = 1; i < gl.DetectorsList.size()+1; i++) {
+          for (size_t i = 1; i < gl.DetectorsList.size()+1; i++) {
           sumEdep = 0.0L;
           auto it = gl.TimeDetect.find(gl.DetectorsList[i-1]);
-          if (it != gl.TimeDetect.end() && gl.tMax>0) {
+          if (it != gl.TimeDetect.end() && gl.tMax!=1.e50*s) {
             long double e = 0;
               const auto &times = it->second.first;
               const auto &edeps = it->second.second;
@@ -362,25 +377,27 @@ long double sumEdep = 0.0L;
                           long double dt = t - tMinAbs;
                           return (dt >= gl.tMin && dt <= gl.tMax) ? e : 0.0L;
                       });
-                      G4cout << " edep " << sumEdep << " minimum Time "<< tMinAbs << G4endl;
-                      G4cout << " minT " << gl.tMin << " maxT "<< gl.tMax << G4endl;
+                      // G4cout << " edep " << sumEdep << " minimum Time "<< tMinAbs << G4endl;
+                      // G4cout << " minT " << gl.tMin << " maxT "<< gl.tMax << G4endl;
                        
               }
               gl.EdepDetect[gl.DetectorsList[i-1]] = sumEdep;
           }
-              if(gl.EdepDetect[gl.DetectorsList[i-1]]>0){
+            if(gl.EdepDetect[gl.DetectorsList[i-1]]>0 && gl.saveTo<2){
             man->FillNtupleIColumn(i, 0, iRun);
             man->FillNtupleDColumn(i, 1, gl.EdepDetect[gl.DetectorsList[i-1]]);
             // man->FillNtupleDColumn(i, 2, gl.TimeDetect[gl.DetectorsList[i-1]].first);
             // man->FillNtupleDColumn(i, 3, gl.TimeDetect[gl.DetectorsList[i-1]].second);
             man->AddNtupleRow(i);}
-            }
+            else  {fout << "\t" << gl.EdepDetect[gl.DetectorsList[i-1]];}
+            } 
+            if(gl.saveTo==2) {fout << "\n";}
 
 
             // G4cout << "Filling data... " << iRun << "  "  << gl.EdepDetect["Det/DetSD"] << G4endl;
-          for (const auto& pair : gl.EdepDetect) {
-          G4cout << "IN MAIN Detector: " << pair.first << " | EDEP: " << pair.second << " " << G4endl;
-          }
+          // for (const auto& pair : gl.EdepDetect) {
+          // G4cout << "IN MAIN Detector: " << pair.first << " | EDEP: " << pair.second << " " << G4endl;
+          // }
           if (E > 0)
           {
             nEvents++;
@@ -482,6 +499,12 @@ long double sumEdep = 0.0L;
             fprintf(outputFile3, "Total efficiency (resp.function): %1.3f\n", SumDetThrBlur/(iRun+1.));
             fprintf(outputFile3, "Time elapsed: %10.1f seconds\n", timeElapsed);
             fprintf(outputFile3, "Pure simulation time elapsed: %10.1f seconds\n", difftime(t1, t0calc));
+            fprintf(outputFile3, "Energy deposition in %i volumes was writen to file output.txt\n", gl.DetectorsList.size());
+            fprintf(outputFile3, "The names of the columns in order it writen to file:\n");
+            fprintf(outputFile3, "RunNumber\t");
+            fprintf(outputFile3, "Det/DetSD\t");
+            for (size_t i = 1; i < gl.DetectorsList.size()+1; i++)  {fprintf(outputFile3,"%s", gl.DetectorsList[i-1].c_str());fprintf(outputFile3, "\t");}
+           
             //G4cout << "### Time elapsed: " << timeElapsed << " seconds" << G4endl;
 
             //G4cout << "### nEvents:    " << nEvents << G4endl;
@@ -519,9 +542,11 @@ man->Write();
 G4cout << "File written successfully." << G4endl;
 man->CloseFile();
 G4cout << "Closing ROOT file..." << G4endl;
+fout.close();
+G4cout << "Closing Text file..." << G4endl;
   delete visManager;
   delete runManager;
-  delete UI;
+  // delete UI;
   // man->Write();
 
 }

@@ -244,7 +244,7 @@ public:
   G4int    VerboseAll;
   G4int    DoPicture;
   G4int    AllowIsotropicRotation;
-  G4int    saveTo; // 0 - root; 1 - csv
+  G4int    saveTo; // 0 - root ntuple; 1 - csv ntupe; 2 - txt columns
   G4int    wrlFilesQuantity; // 0-N events
   G4String PhysicsList; // Options: hadr:  CHIPS, FTFP_BERT, FTFP_BERT_TRV, FTFP_BERT_HP, FTF_BIC, LBE, LHEP, 
                     // QBBC, QGSC_BERT, QGSP_BERT, QGSP_BERT_CHIPS, QGSP_BERT_HP, QGSP_BIC, QGSP_BIC_HP,
