@@ -322,7 +322,7 @@ if(gl.DoPicture==0 || gl.DoPicture==1){
 long double sumEdep = 0.0L;
           
           auto it = gl.TimeDetect.find("Det/DetSD");
-          if (it != gl.TimeDetect.end()) {
+          if (it != gl.TimeDetect.end() && gl.tMax>0) {
               const auto &times = it->second.first;
               const auto &edeps = it->second.second;
               long double e = 0;
@@ -349,7 +349,7 @@ long double sumEdep = 0.0L;
             for (size_t i = 1; i < gl.DetectorsList.size()+1; i++) {
           sumEdep = 0.0L;
           auto it = gl.TimeDetect.find(gl.DetectorsList[i-1]);
-          if (it != gl.TimeDetect.end()) {
+          if (it != gl.TimeDetect.end() && gl.tMax>0) {
             long double e = 0;
               const auto &times = it->second.first;
               const auto &edeps = it->second.second;

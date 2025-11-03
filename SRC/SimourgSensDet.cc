@@ -81,8 +81,10 @@ G4cout << " Volume " << fName << " At a time " << tHit << " Edep " << edep << " 
 	if (gl.tMaxHit < tHit) gl.tMaxHit = tHit;
 	gl.tHit[gl.numHits] = tHit;
 	gl.eHit[gl.numHits] = (partCharge <= 1) ? edep : edep*gl.AlphaBeta;
+	if (gl.tMax>0){ // If user had set tmin and tmax than perform this procedure, either it only will lower efficiency
 	gl.TimeDetect[fName].first.push_back(tHit);
 	gl.TimeDetect[fName].second.push_back((partCharge <= 1) ? edep : edep*gl.AlphaBeta);
+	}
 	gl.numHits++;
 	if (gl.numHits >= LENGTH_HIT_ARR) // to compress arrays if they are overfilled
 	{

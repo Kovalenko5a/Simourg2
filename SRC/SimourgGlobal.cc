@@ -128,7 +128,7 @@ SimourgGlobal::SimourgGlobal()
 
 	AlphaBeta=1.;
 	tMin=0.*s;
-	tMax=1.e50*s;
+	tMax=-1.e50*s;
 	tFirstHit=0.;
 
   AllowIsotropicRotation = 1;
