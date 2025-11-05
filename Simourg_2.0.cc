@@ -338,16 +338,24 @@ long double sumEdep = 0.0L;
               long double e = 0;
               if (!times.empty() && times.size() == edeps.size()) {
                   long double tMinAbs = *std::min_element(times.begin(), times.end());
+                  // for(int i=0; i<times.size(); i++)
+                  // {
+                  //   G4double dt = (times[i]-tMinAbs)/1e9;
+                  //   if(dt >= gl.tMin && dt <= gl.tMax) sumEdep+= edeps[i];
+                  //   G4cout << (dt >= gl.tMin && dt <= gl.tMax) << " TRUE? " << gl.tMin << " - tMIN and tMax -" << gl.tMax << " dt " <<  dt  << " In time i"  << times[i]/1e9 << " EDEP  " << edeps[i]  << G4endl;
+                  // }
                   sumEdep = std::transform_reduce(
                       times.begin(), times.end(), edeps.begin(), 0.0L,
                       std::plus<>(), [&](long double t, long double e) {
-                          long double dt = t - tMinAbs;
+                          long double dt = (t - tMinAbs)/1e9;
                           return (dt >= gl.tMin && dt <= gl.tMax) ? e : 0.0L;
-                      });
+                     });
                       // G4cout << " edep " << sumEdep << " minimum Time "<< tMinAbs << G4endl;
               }
               // G4cout << " EDEP ORIGINAL " << gl.EdepDetect["Det/DetSD"]  << G4endl;
+              // G4cout << " EDEP Recalculated in time window " << sumEdep  << G4endl;
               gl.EdepDetect["Det/DetSD"] = sumEdep;
+              // G4cout << " EDEP Replaced in time window " << gl.EdepDetect["Det/DetSD"]  << G4endl;
           }
           // G4cout << " EDEP ORIGINAL " << gl.EdepDetect["Det/DetSD"]  << G4endl;
           G4double E = gl.EdepDetect["Det/DetSD"];
@@ -374,12 +382,11 @@ long double sumEdep = 0.0L;
                   sumEdep = std::transform_reduce(
                       times.begin(), times.end(), edeps.begin(), 0.0L,
                       std::plus<>(), [&](long double t, long double e) {
-                          long double dt = t - tMinAbs;
+                          long double dt = (t - tMinAbs)/1e9;
                           return (dt >= gl.tMin && dt <= gl.tMax) ? e : 0.0L;
                       });
-                      // G4cout << " edep " << sumEdep << " minimum Time "<< tMinAbs << G4endl;
-                      // G4cout << " minT " << gl.tMin << " maxT "<< gl.tMax << G4endl;
-                       
+                      G4cout << " edep " << sumEdep << " minimum Time "<< tMinAbs << G4endl;
+                      // G4cout << " minT " << gl.tMin << " maxT "<< gl.tMax << G4endl;         
               }
               gl.EdepDetect[gl.DetectorsList[i-1]] = sumEdep;
           }
