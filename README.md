@@ -9,20 +9,21 @@ The simulation workflow is fully macro-driven, similar to GAMOS, but with a stro
 Simourg requires a GEANT4 installation compiled with data libraries, Qt support, and OpenGL visualization.
 Example CMake flags for GEANT4:
 
--DGEANT4_INSTALL_DATA=ON
--DGEANT4_USE_QT=ON
--DGEANT4_USE_OPENGL_X11=ON
+-DGEANT4_INSTALL_DATA=ON<br>
+-DGEANT4_USE_QT=ON<br>
+-DGEANT4_USE_OPENGL_X11=ON<br>
+
 
 ## Installation
 
 To install Simourg, compile the source code like a GEANT4 basic example:
 
-git clone https://github.com/YOUR_REPO/Simourg.git
-cd Simourg
-mkdir build
-cd build
-cmake ..
-make -j4
+git clone https://github.com/YOUR_REPO/Simourg.git<br>
+cd Simourg<br>
+mkdir build<br>
+cd build<br>
+cmake ..<br>
+make -j4<br>
 
 This will generate the executable file Simourg.exe. More installation details are in the repository.
 
@@ -38,53 +39,53 @@ Macro files define geometry, materials, source configuration, readout parameters
 
 ### General Commands
 
-/user/init
-/user/showAll
+/user/init<br>
+/user/showAll<br>
 
 ### Geometry Blocks
 
 Define each volume with dimensions, position, rotation, material, and detector flag:
 
-/user/XL_Det 50 mm
-/user/YL_Det 50 mm
-/user/ZL_Det 50 mm
-/user/Z_Det 0 mm
-/user/isDetDetector 1
+/user/XL_Det 50 mm<br>
+/user/YL_Det 50 mm<br>
+/user/ZL_Det 50 mm<br>
+/user/Z_Det 0 mm<br>
+/user/isDetDetector 1<br>
 
 ### Material Definition
 
 Element-based formula
 
-/user/MaterialDetDensity 8.0 g/cm3
-/user/MaterialDetElementName Cd
-/user/MaterialDetFormulaNum 1
-/user/MaterialDetElementName W
-/user/MaterialDetFormulaNum 1
-/user/MaterialDetElementName O
-/user/MaterialDetFormulaNum 4
+/user/MaterialDetDensity 8.0 g/cm3<br>
+/user/MaterialDetElementName Cd<br>
+/user/MaterialDetFormulaNum 1<br>
+/user/MaterialDetElementName W<br>
+/user/MaterialDetFormulaNum 1<br>
+/user/MaterialDetElementName O<br>
+/user/MaterialDetFormulaNum 4<br>
 
 Weight fractions
 
-/user/MaterialTop1Density 10 g/cm3
-/user/MaterialTop1Weight Cu 100 F 10 Cs 123.2
+/user/MaterialTop1Density 10 g/cm3<br>
+/user/MaterialTop1Weight Cu 100 F 10 Cs 123.2<br>
 
 ### Source and UnSource Volumes
 
 Source volume
 
-/user/XL_Src 1 mm
-/user/YL_Src 1 mm
-/user/ZL_Src 1 mm
-/user/X_Src 0 mm
-/user/Y_Src 0 mm
-/user/Z_Src 35 mm
+/user/XL_Src 1 mm<br>
+/user/YL_Src 1 mm<br>
+/user/ZL_Src 1 mm<br>
+/user/X_Src 0 mm<br>
+/user/Y_Src 0 mm<br>
+/user/Z_Src 35 mm<br>
 
 UnSource volume
 
-/user/D_UnSrc 1 mm
-/user/X_UnSrc 1 mm
-/user/Y_UnSrc 0 mm
-/user/Z_UnSrc 35 mm
+/user/D_UnSrc 1 mm<br>
+/user/X_UnSrc 1 mm<br>
+/user/Y_UnSrc 0 mm<br>
+/user/Z_UnSrc 35 mm<br>
 
 ### Decay file
 
@@ -92,29 +93,29 @@ UnSource volume
 
 ### Run and Readout Parameters
 
-/user/Threshold 1 keV
-/user/FWHM1 0.0
-/user/FWHM2 1.0
-/user/ELowLimit 1 keV
-/user/ChannelWidth 10 keV
-/user/numberOfRuns 10000
-/user/Step 100
-/user/RandomSeed 90115037
+/user/Threshold 1 keV<br>
+/user/FWHM1 0.0<br>
+/user/FWHM2 1.0<br>
+/user/ELowLimit 1 keV<br>
+/user/ChannelWidth 10 keV<br>
+/user/numberOfRuns 10000<br>
+/user/Step 100<br>
+/user/RandomSeed 90115037<br>
 
 ### Readout time window
 
-/user/tMin 0.0 s
-/user/tMax 300000 s
+/user/tMin 0.0 s<br>
+/user/tMax 300000 s<br>
 
 ### Visualization
 
-/user/DoPicture 0  # 0=no picture, 1=VRML, 2=OpenGL
-/user/wrlFilesQuantity 100
+/user/DoPicture 0  # 0=no picture, 1=VRML, 2=OpenGL<br>
+/user/wrlFilesQuantity 100<br>
 
 ### Rotation Options
 
-/user/AllowIsotropicRotation 1  # enable random isotropic rotation
-/user/Rot_Top1 30 80 30        # example fixed rotation
+/user/AllowIsotropicRotation 1  # enable random isotropic rotation<br>
+/user/Rot_Top1 30 80 30        # example fixed rotation<br>
 
 ### Output Format
 
@@ -122,9 +123,9 @@ UnSource volume
 
 ### Verbosity and Interactive Options
 
-/user/VerboseVis 0   # visualization verbosity 0-6
-/user/VerboseAll 0   # general verbosity 0-6
-/user/WaitCommand 0  # wait for command 0/1
+/user/VerboseVis 0   # visualization verbosity 0-6<br>
+/user/VerboseAll 0   # general verbosity 0-6<br>
+/user/WaitCommand 0  # wait for command 0/1<br>
 
 ### Physics List
 
@@ -134,8 +135,8 @@ Available physics lists include CHIPS, FTFP_BERT, FTFP_BERT_TRV, FTFP_BERT_HP, F
 
 
 Notes
-	•	Keep geometry parameters grouped separately to avoid confusion.
-	•	tMin and tMax define the detector readout window relative to the trigger (time moment of first energy deposition).
-	•	DoPicture controls visualization mode; saveTo selects output format.
-	•	Materials may be defined by atomic numbers or weight fractions.
-	•	Explore /user/* commands in the Qt interface for additional options.
+* Keep geometry parameters grouped separately to avoid confusion.
+* tMin and tMax define the detector readout window relative to the trigger (time moment of first energy deposition).
+* DoPicture controls visualization mode; saveTo selects output format.
+* Materials may be defined by atomic numbers or weight fractions.
+* Explore /user/* commands in the Qt interface for additional options.
