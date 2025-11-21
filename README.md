@@ -2,7 +2,7 @@
 
 
 Simourg 2.0 is a GEANT4-based Monte Carlo framework for simulating radiation detectors, shielding structures, and source configurations.
-The simulation workflow is fully macro-driven, similar to GAMOS, but with a stronger focus on detector response modeling.
+The simulation workflow is fully macro-driven, with a strong focus on detector response modeling.
 
 ## Requirements
 
@@ -25,114 +25,254 @@ cd build<br>
 cmake ..<br>
 make -j4<br>
 
-This will generate the executable file Simourg.exe. More installation details are in the repository.
+This will generate the executable file Simourg
 
 ## Running a Simulation
 
 Run Simourg with a macro file:
 
-./Simourg.exe YOUR_SETUP_FILE.mac
+./Simourg YOUR_SETUP_FILE.mac
 
 Macro files define geometry, materials, source configuration, readout parameters, visualization options, and output formats. Examples are included in the source code, and all /user/* commands can be viewed in the Qt interface.
 
-## Macro File Structure
+# Simourg 2.0 - Geometry Definition Command refference
 
-### General Commands
+Simourg 2.0 defines detector geometry entirely through `/user/*` macro commands.  
+Each volume supports dimensions, position, rotation, material definition, and detector flags.
 
-/user/init<br>
-/user/showAll<br>
+## Detector Volume
 
-### Geometry Blocks
+### Dimensions
+/user/D_Det — Diameter of cylindrical detector volume  
+/user/XL_Det — X size of prism detector  
+/user/YL_Det — Y size of prism detector  
+/user/ZL_Det — Z size (height) of detector volume  
 
-Define each volume with dimensions, position, rotation, material, and detector flag:
+### Position
+/user/X_Det — X coordinate of detector center  
+/user/Y_Det — Y coordinate of detector center  
+/user/Z_Det — Z coordinate of detector center  
 
-/user/XL_Det 50 mm<br>
-/user/YL_Det 50 mm<br>
-/user/ZL_Det 50 mm<br>
-/user/Z_Det 0 mm<br>
-/user/isDetDetector 1<br>
+### Rotation
+/user/Rot_Det X Y Z — Rotation angles (deg) around X, Y, Z  
 
-### Material Definition
+## Cavity Volume
 
-Element-based formula
+### Detector Flag
+/user/isCavityaDetector — Define whether cavity is treated as a detector (0/1)
 
-/user/MaterialDetDensity 8.0 g/cm3<br>
-/user/MaterialDetElementName Cd<br>
-/user/MaterialDetFormulaNum 1<br>
-/user/MaterialDetElementName W<br>
-/user/MaterialDetFormulaNum 1<br>
-/user/MaterialDetElementName O<br>
-/user/MaterialDetFormulaNum 4<br>
+### Dimensions
+/user/D_Cavity — Diameter of cavity volume  
+/user/ZL_Cavity — Z size (height) of cavity  
 
-Weight fractions
+### Position
+/user/X_Cavity — X coordinate of cavity center  
+/user/Y_Cavity — Y coordinate of cavity center  
+/user/Z_Cavity — Z coordinate of cavity center  
 
-/user/MaterialTop1Density 10 g/cm3<br>
-/user/MaterialTop1Weight Cu 100 F 10 Cs 123.2<br>
+### Rotation
+/user/Rot_Cavity X Y Z — Rotation angles (deg)  
 
-### Source and UnSource Volumes
+## Material Definition Methods
 
-Source volume
+Simourg supports two independent ways to define material composition for any volume:  
+(1) by atomic formula (element + number of atoms), and  
+(2) by weight fractions (element + mass weight).
 
-/user/XL_Src 1 mm<br>
-/user/YL_Src 1 mm<br>
-/user/ZL_Src 1 mm<br>
-/user/X_Src 0 mm<br>
-/user/Y_Src 0 mm<br>
-/user/Z_Src 35 mm<br>
+Both methods start with a density definition.
 
-UnSource volume
+### Density
+/user/MaterialCavityDensity — Density of cavity material  
 
-/user/D_UnSrc 1 mm<br>
-/user/X_UnSrc 1 mm<br>
-/user/Y_UnSrc 0 mm<br>
-/user/Z_UnSrc 35 mm<br>
+---
 
-### Decay file
+### 1) Material Definition by Atomic Formula
 
-/user/Decay0File C:/path/to/Tl208.dat
+This method specifies each element and the number of atoms in the chemical formula.
 
-### Run and Readout Parameters
+#### Commands
+/user/MaterialCavityElementName — Chemical element name  
+/user/MaterialCavityFormulaNum — Number of atoms of last element  
 
-/user/Threshold 1 keV<br>
-/user/FWHM1 0.0<br>
-/user/FWHM2 1.0<br>
-/user/ELowLimit 1 keV<br>
-/user/ChannelWidth 10 keV<br>
-/user/numberOfRuns 10000<br>
-/user/Step 100<br>
-/user/RandomSeed 90115037<br>
+#### Example: Defining WO₃  
+```
+/user/MaterialCavityDensity 7.16 g/cm3
+/user/MaterialCavityElementName W
+/user/MaterialCavityFormulaNum 1
+/user/MaterialCavityElementName O
+/user/MaterialCavityFormulaNum 3
+```
 
-### Readout time window
+#### Example: Defining CdWO₄  
+```
+/user/MaterialCavityDensity 8.0 g/cm3
+/user/MaterialCavityElementName Cd
+/user/MaterialCavityFormulaNum 1
+/user/MaterialCavityElementName W
+/user/MaterialCavityFormulaNum 1
+/user/MaterialCavityElementName O
+/user/MaterialCavityFormulaNum 4
+```
 
-/user/tMin 0.0 s<br>
-/user/tMax 300000 s<br>
+---
 
-### Visualization
+### 2) Material Definition by Weight Fractions
 
-/user/DoPicture 0  # 0=no picture, 1=VRML, 2=OpenGL<br>
-/user/wrlFilesQuantity 100<br>
+This method specifies the material as a mixture of chemical elements with associated weights.
 
-### Rotation Options
+#### Command
+/user/MaterialCavityWeight — List of element–weight pairs  
 
-/user/AllowIsotropicRotation 1  # enable random isotropic rotation<br>
-/user/Rot_Top1 30 80 30        # example fixed rotation<br>
+#### Example: Bronze-like mixture  
+```
+/user/MaterialCavityDensity 8.7 g/cm3
+/user/MaterialCavityWeight Cu 900 Sn 100
+```
 
-### Output Format
+#### Example: Multi-element mixture  
+```
+/user/MaterialCavityDensity 10 g/cm3
+/user/MaterialCavityWeight Cd 1000 W 100 O 10
+```
 
-/user/saveTo 0  # 0=ROOT, 1=CSV, 2=TXT (headers in ShourtLog.txt)
+---
 
-### Verbosity and Interactive Options
+You may use **either** atomic formulas **or** weight fractions to define material composition for any Simourg volume.
 
-/user/VerboseVis 0   # visualization verbosity 0-6<br>
-/user/VerboseAll 0   # general verbosity 0-6<br>
-/user/WaitCommand 0  # wait for command 0/1<br>
+# Simourg 2.0 — General Command Reference
 
-### Physics List
+This section lists all available `/user/*` commands and their meanings, based directly on their internal GEANT4 `SetGuidance()` descriptions.
 
-/user/PhysicsList FTFP_BERT_LIV
+---
 
-Available physics lists include CHIPS, FTFP_BERT, FTFP_BERT_TRV, FTFP_BERT_HP, FTF_BIC, LBE, LHEP, QBBC, QGSC_BERT, QGSP_BERT, QGSP_BERT_CHIPS, QGSP_BERT_HP, QGSP_BIC, QGSP_BIC_HP, QGSP_FTFP_BERT, QGS_BIC, QGSP_INCLXX, Shielding, ShieldingLEND, and EM variants (_EMV, _EMX, _EMY, _EMZ, _LIV, _PEN).
+## General Commands
 
+### `/user/showAll`
+Show all current parameter values.
+
+### `/user/init`
+Initialize the detector.
+
+### `/user/reset`
+Reset and re-initialize the detector.
+
+---
+
+## Output & File Handling
+
+### `/user/saveTo <0|1|2>`
+Save output in one of three formats:  
+- **0** — ROOT ntuple  
+- **1** — CSV ntuple  
+- **2** — CSV columns  
+
+### `/user/wrlFilesQuantity <N>`
+Number of **VRML (.wrl)** geometry files to save.
+
+---
+
+## Energy Cuts & Detector Resolution
+
+### `/user/EGamma <value> [unit]`
+Lower cut for particle energy.
+
+### `/user/FWHM1 <value>`
+Detector resolution term:  
+`FWHM[keV] = sqrt( FWHM1[keV²] + FWHM2[keV] * Eγ[keV] )`
+
+### `/user/FWHM2 <value>`
+Second detector resolution coefficient used in the formula above.
+
+### `/user/AlphaBeta <value>`
+Energy scaling factor:  
+`E_observed = E_released * AlphaBeta`  
+Typically `< 1`.
+
+### `/user/Threshold <value> [unit]`
+Detector energy threshold.
+
+---
+
+## Time Window
+
+### `/user/tMin <value> [unit]`
+Minimal time of particle emission relative to event start.
+
+### `/user/tMax <value> [unit]`
+Maximal time of particle emission relative to event start.
+
+---
+
+## Low-Energy & Step Limits
+
+### `/user/ELowLimit <value> [unit]`
+Lower cut for particle energy (global).
+
+### `/user/DELowLimit <value> [unit]`
+Lower cut for **electron/positron** distance step.
+
+### `/user/DGLowLimit <value> [unit]`
+Lower cut for **gamma** distance step.
+
+---
+
+## Spectrum & Run Control
+
+### `/user/ChannelWidth <value> [unit]`
+Width of one channel in the output spectrum.
+
+### `/user/numberOfRuns <N>`
+Number of runs (1 run = 1 decay vertex generated).
+
+### `/user/Step <N>`
+Print progress every *N* runs.
+
+### `/user/RandomSeed <N>`
+Set the random number generator seed.
+
+### `/user/WaitCommand <0|1>`
+Wait for an external command (1) or proceed immediately (0).
+
+---
+
+## Verbosity & Visualization
+
+### `/user/VerboseVis <0–6>`
+Verbosity level of visualization.
+
+### `/user/VerboseAll <0–6>`
+Verbosity level for all other outputs.
+
+### `/user/DoPicture <0|1|2>`
+Select visualization mode:  
+- **0** — No visualization  
+- **1** — Save VRML files  
+- **2** — Open OpenGL viewer
+
+---
+
+## Rotation Options
+
+### `/user/AllowIsotropicRotation <0|1>`
+Allow random isotropic rotation of initial kinematics vertex (1 = yes).
+
+---
+
+## Physics
+
+### `/user/PhysicsList <name>`
+Select physics list.  
+Supports GEANT4 lists such as:  
+`FTFP_BERT`, `QGSP_BIC`, `Shielding`, `FTFP_BERT_LIV`, etc., and their EM extensions (`_EMV`, `_EMX`, `_LIV`, `_PEN`, etc.).
+
+---
+
+## Source & Decay
+
+### `/user/Decay0File <path>`
+Specify Decay0 input file for radioactive decay simulation.
+
+---
 
 Notes
 * Keep geometry parameters grouped separately to avoid confusion.
