@@ -1,4 +1,4 @@
-// Simourg_1.4.cc :
+// Simourg_2.0.cc :
 //
 // cylindric or box detector within cylindric or box cavity within cylindric passive shield
 // 6 additional cylindric volumes (along axis)
@@ -63,7 +63,7 @@ SimourgGlobal gl;
 
 int main(int argc, char* argv[])
 { 
-  G4cout << "=================== Simourg v1.4 ====================" << G4endl;
+  G4cout << "=================== Simourg v2.0 ====================" << G4endl;
   G4cout << "====== Assembly: " __DATE__ " " __TIME__ " " << G4endl;
   G4cout << "====== www: http://lpd.kinr.kiev.ua/kobychev/Simourg/" << G4endl;
   gl.TimeStampMain = "Executing " __FILE__ " (compiled " __DATE__ " " __TIME__ ")";
@@ -187,13 +187,6 @@ G4cout << "runManager Initialize 1" << G4endl;
     }
     if(gl.DoPicture == 1)
     {
-      //todo 1: variable with limit
-      //todo 2: each volume - sens detector - more than 1 detector: edep in each detector per event(run)
-      // number of event, edep in 1 detecto, edep in 2 detector ....
-      //#/user/VolumeSrc Det - uncomment for any detector -> perform as active detector
-      //todo 3: volumes rotation on angle
-      //todo 4: buildin volumes intersection procedure HIGHT PRIORITY
-      // comment - simple for user
         G4String vrmlFiles = "G4VRMLFILE_MAX_FILE_NUM=" + std::to_string(gl.wrlFilesQuantity);
       #ifdef _WIN32
           std::cout << "Running on Windows" << std::endl;
@@ -359,7 +352,6 @@ long double sumEdep = 0.0L;
           }
           // G4cout << " EDEP ORIGINAL " << gl.EdepDetect["Det/DetSD"]  << G4endl;
           G4double E = gl.EdepDetect["Det/DetSD"];
-//TODO: save all edep from each detector in one file (different columts)
             if(gl.saveTo<2){
             man->FillNtupleIColumn(0, 0, iRun);
             man->FillNtupleDColumn(0, 1, gl.EdepDetect["Det/DetSD"]);
