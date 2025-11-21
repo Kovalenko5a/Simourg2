@@ -16,7 +16,7 @@ Example CMake flags for GEANT4:
 
 ## Installation
 
-To install Simourg, compile the source code like a GEANT4 basic example:
+To install Simourg, compile the source code:
 
 git clone https://github.com/YOUR_REPO/Simourg.git<br>
 cd Simourg<br>
@@ -33,20 +33,40 @@ Run Simourg with a macro file:
 
 ./Simourg YOUR_SETUP_FILE.mac
 
-Macro files define geometry, materials, source configuration, readout parameters, visualization options, and output formats. Examples are included in the source code, and all /user/* commands can be viewed in the Qt interface.
+Macro files define geometry, materials, source configuration, readout parameters, visualization options, and output formats. Examples are included with the source code, and all /user/* commands can be viewed in the Qt interface.
 
 # Simourg 2.0 - Geometry Definition Command refference
 
 Simourg 2.0 defines detector geometry entirely through `/user/*` macro commands.  
 Each volume supports dimensions, position, rotation, material definition, and detector flags.
 
-## Detector Volume
+
+## Supported Volume Types and Allowed Shapes
+
+- **Det** — cylinder **or** parallelepiped  
+- **Src** — cylinder **or** parallelepiped  
+- **UnSrc** — cylinder **or** parallelepiped  
+- **Cover1** — cylinder **or** parallelepiped  
+- **Cover2** — cylinder **or** parallelepiped  
+
+- **SHLD** — **cylinder only**  
+- **Cavity** — **cylinder only**  
+
+Volumes supporting **rings** (outer + inner radius):
+- **Top1** — ring cylinder (R_out + R_in)  
+- **Top2** — ring cylinder (R_out + R_in)  
+- **Top3** — ring cylinder (R_out + R_in)  
+- **Bot1** — ring cylinder (R_out + R_in)  
+- **Bot2** — ring cylinder (R_out + R_in)  
+- **Bot3** — ring cylinder (R_out + R_in)
+
+## Detector Volume Example
 
 ### Dimensions
 /user/D_Det — Diameter of cylindrical detector volume  
 /user/XL_Det — X size of prism detector  
 /user/YL_Det — Y size of prism detector  
-/user/ZL_Det — Z size (height) of detector volume  
+/user/ZL_Det — Z size ( or cylindr height) of detector volume  
 
 ### Position
 /user/X_Det — X coordinate of detector center  
@@ -56,7 +76,7 @@ Each volume supports dimensions, position, rotation, material definition, and de
 ### Rotation
 /user/Rot_Det X Y Z — Rotation angles (deg) around X, Y, Z  
 
-## Cavity Volume
+## Cavity Volume Example
 
 ### Detector Flag
 /user/isCavityaDetector — Define whether cavity is treated as a detector (0/1)
@@ -161,7 +181,7 @@ Reset and re-initialize the detector.
 ## Output & File Handling
 
 ### `/user/saveTo <0|1|2>`
-Save output in one of three formats:  
+Save unprocessed output in one of three formats:  
 - **0** — ROOT ntuple  
 - **1** — CSV ntuple  
 - **2** — CSV columns  
@@ -171,10 +191,11 @@ Number of **VRML (.wrl)** geometry files to save.
 
 ---
 
-## Energy Cuts & Detector Resolution
+## Energy Cuts, Detector Resolution & Spectrum
+Along with raw energy deposition data you will have detected spectrum in accordanse to resolution 
 
-### `/user/EGamma <value> [unit]`
-Lower cut for particle energy.
+### `/user/ChannelWidth <value> [unit]`
+Width of one channel in the output spectrum.
 
 ### `/user/FWHM1 <value>`
 Detector resolution term:  
@@ -184,9 +205,13 @@ Detector resolution term:
 Second detector resolution coefficient used in the formula above.
 
 ### `/user/AlphaBeta <value>`
-Energy scaling factor:  
+For beta and gamma:
+`E_observed = E_released`
+
+For alpha you can apply energy scaling factor:  
 `E_observed = E_released * AlphaBeta`  
 Typically `< 1`.
+
 
 ### `/user/Threshold <value> [unit]`
 Detector energy threshold.
@@ -196,10 +221,10 @@ Detector energy threshold.
 ## Time Window
 
 ### `/user/tMin <value> [unit]`
-Minimal time of particle emission relative to event start.
+Minimal time of particle emission relative to event start (time moment when detector is triggered).
 
 ### `/user/tMax <value> [unit]`
-Maximal time of particle emission relative to event start.
+Maximal time of particle emission relative to event start (time moment when detector time window is closing).
 
 ---
 
@@ -216,10 +241,7 @@ Lower cut for **gamma** distance step.
 
 ---
 
-## Spectrum & Run Control
-
-### `/user/ChannelWidth <value> [unit]`
-Width of one channel in the output spectrum.
+## Run Control
 
 ### `/user/numberOfRuns <N>`
 Number of runs (1 run = 1 decay vertex generated).
@@ -247,7 +269,7 @@ Verbosity level for all other outputs.
 Select visualization mode:  
 - **0** — No visualization  
 - **1** — Save VRML files  
-- **2** — Open OpenGL viewer
+- **2** — OpenGL viewer
 
 ---
 
@@ -268,6 +290,8 @@ Supports GEANT4 lists such as:
 ---
 
 ## Source & Decay
+### `/user/EGamma <value> [unit]`
+Particle energy.
 
 ### `/user/Decay0File <path>`
 Specify Decay0 input file for radioactive decay simulation.
