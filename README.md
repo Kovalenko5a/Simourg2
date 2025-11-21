@@ -35,6 +35,11 @@ Run Simourg with a macro file:
 
 Macro files define geometry, materials, source configuration, readout parameters, visualization options, and output formats. Examples are included with the source code, and all /user/* commands can be viewed in the Qt interface.
 
+## License
+Simourg 2.0 is released under the LGPL-3.0 license with an additional 
+scientific acknowledgment clause. Please see the LICENSE file for details.
+[![License: LGPL v3](https://img.shields.io/badge/License-LGPLv3-blue.svg)](LICENSE)
+
 # Simourg 2.0 - Geometry Definition Command refference
 
 Simourg 2.0 defines detector geometry entirely through `/user/*` macro commands.  
