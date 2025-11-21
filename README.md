@@ -166,7 +166,7 @@ You may use **either** atomic formulas **or** weight fractions to define materia
 
 # Simourg 2.0 — General Command Reference
 
-This section lists all available `/user/*` commands and their meanings, based directly on their internal GEANT4 `SetGuidance()` descriptions.
+This section lists non-construction `/user/*` commands and their meanings.
 
 ---
 
